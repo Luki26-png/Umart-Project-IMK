@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="global.css" rel="stylesheet">
+    <style>
+        @media screen and (max-width:680px) {
+            #kelola-produk-card{
+                width: 100% !important;
+            }
+
+            #kelola-produk-title{
+                width: 100% !important;
+            }
+
+            #kelola-produk-card-container{
+                width: 100% !important;
+                border: none !important;
+                padding: 0.5em 0.5em !important;
+            }
+        }
+    </style>
+    <title>Kelola Produk</title>
+</head>
+<body>
+    <main class="fluid-container my-5">
+        <div class="w-75 border border-primary d-flex flex-wrap flex-column justify-content-center align-items-center py-5 m-auto" id="kelola-produk-card-container">
+            <h2 class="mb-3" style="width: 30rem;" id="kelola-produk-title">Kelola Produk</h2>
+            <div class="card" style="width: 30rem;" id="kelola-produk-card">
+                <img src="https://imageplaceholder.net/600x400" class="card-img-top" alt="gambar produk">
+                <div class="card-body">
+                  <h5 class="card-title">Nama Produk</h5>
+                  <p class="card-text">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sapiente, eius ipsa esse modi corrupti, sit fugit deserunt est velit vel rem perferendis voluptates corporis iste. Laborum quis expedita ad quidem.</p>
+                  <div class="btn-group my-4" role="group" aria-label="Basic mixed styles example">
+                    <button type="button" class="btn btn-warning background-kuning me-3 rounded-1">Hapus</button>
+                    <button type="button" class="btn btn-primary background-biru-laut ms-3 rounded-1">Update</button>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "name": "umart-project-imk",
+  "version": "1.0.0",
+  "description": "Tugas Kelompok Mata Kuliah Interaksi Manusia dan Komputer",
+  "homepage": "https://github.com/Luki26-png/Umart-Project-IMK#readme",
+  "bugs": {
+    "url": "https://github.com/Luki26-png/Umart-Project-IMK/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Luki26-png/Umart-Project-IMK.git"
+  },
+  "license": "ISC",
+  "author": "Kelompok 6",
+  "type": "commonjs",
+  "main": "dist/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}

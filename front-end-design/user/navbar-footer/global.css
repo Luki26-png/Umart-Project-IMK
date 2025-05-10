@@ -1,0 +1,25 @@
+/* file ini berisi style global untuk html, seperti warna, dll*/
+
+.biru-laut{
+    color: #006094;
+}
+
+.biru-laut-50{
+    color: #006094a8;
+}
+
+.kuning{
+    color: #FFCD38;
+}
+
+.biru-muda{
+    color: #0077B6;
+}
+
+.background-biru-muda{
+    background-color: #0077B6;
+}
+
+.background-biru-laut{
+    background-color: #006094;
+  }
