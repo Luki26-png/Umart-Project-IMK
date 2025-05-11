@@ -1,0 +1,44 @@
+.biru-laut-border-nav{
+    border: 1.5px solid #006094;
+}
+
+#cart-icon:hover{
+    cursor: pointer;
+}
+
+#notification-icon:hover{
+    cursor:pointer; 
+}
+
+#login-button:hover{
+    background-color: #006094;
+    color: white;
+}
+
+@media screen and (max-width : 900px){
+    #navbar-content{
+        flex-direction: column;
+    }
+
+    #navbar-logo{
+        text-align: center;
+    }
+
+    #navbar-menu{
+        width: 100% !important;
+        justify-content: space-between !important;
+        padding: 0.5em 0em;
+    }
+
+    #navbar-icon{
+        width: 100% !important;
+        margin: 1em 0em;
+    }
+
+}
+
+@media screen and (max-width : 574px){
+    #login-button{
+        margin: 0.5em 0em;
+    }
+}

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="global.css" rel="stylesheet">
+    <style>
+        @media screen and (max-width:1050px) {
+            #isi-data-produk-form{
+                width: 80% !important;
+            }
+        }
+
+        @media screen and (max-width:625px) {
+            #isi-data-produk-form{
+                width: 95% !important;
+            }
+        }
+    </style>
+    <title>Document</title>
+</head>
+<body>
+    <main class="container-fluid my-5">
+        <div class="d-flex justify-content-center">
+            <form class="w-50 p-5" style="border: 1px solid #006094;" id="isi-data-produk-form">
+                <h2 class="mb-5">ISI DATA</h2>
+                <div class="mb-3">
+                    <label for="nama-produk" class="form-label fw-bold">Nama Produk</label>
+                    <input type="text" class="form-control" id="nama-produk" placeholder="Masukkan Nama Produk">
+                </div>
+                <div class="mb-3">
+                    <label for="harga-produk" class="form-label fw-bold">Harga Produk</label>
+                    <input type="text" class="form-control" id="harga-produk" placeholder="Masukkan Harga Produk">
+                </div>
+                <div class="mb-3">
+                    <label for="deskripsi-produk" class="form-label fw-bold">Deskripsi Produk</label>
+                    <textarea class="form-control" id="deskripsi-produk" rows="5" placeholder="Masukkan Deskripsi Produk"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="img-file" class="form-label fw-bold">Upload Gambar</label>
+                    <input class="form-control" type="file" id="img-file">
+                </div>
+
+                <button class="btn btn-primary my-4 background-biru-laut">Tambahkan</button>
+            </form>
+        </div>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
