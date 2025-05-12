@@ -1,19 +1,48 @@
-import mysql, { ConnectionOptions } from 'mysql2/promise'; // Import the promise-based API
+import mysql, { Pool, PoolOptions } from 'mysql2/promise';
+import { ProductProps } from '../Models/productModel';
 import dbAuth from './config';
 
-const access: ConnectionOptions = dbAuth;
+export class DatabaseService {
+  private static pool: Pool;
 
-async function fetchData(){
-  try {
-    const connection = await mysql.createConnection(access);
-    const [rows, fields] = await connection.execute("SELECT * FROM `products`;");
-    console.log(rows);
-    await connection.end(); // Close the connection when done
-  } catch (error) {
-    console.error("Error fetching data:", error);
+  // Initialize pool once
+  public static init() {
+    if (!this.pool) {
+      this.pool = mysql.createPool(dbAuth as PoolOptions);
+      console.log("Connection pool created");
+    }
+  }
+
+  // Get the pool to use in queries
+  public static getPool(): Pool {
+    if (!this.pool) throw new Error("Database pool not initialized. Call DatabaseService.init() first.");
+    return this.pool;
   }
 }
 
-fetchData().then(():void =>{
-    console.log("fetching data complete");
-});
+export class ProductService {
+  public async insertToProductTable(props:ProductProps){
+    const sqlQuery = `
+    INSERT INTO products (id, name, description, price, summary, cover, category) VALUES
+    (?,?,?,?,?,?,?);`;
+    
+    const values = [
+      props.id,
+      props.name,
+      props.description,
+      props.price,
+      props.summary,
+      props.cover,
+      props.category
+    ];
+
+    try {
+      const pool = DatabaseService.getPool();
+      const [result, fields] = await pool.query(sqlQuery, values);
+      console.log("Database Operation Result", result);
+      console.log("Database Operation Field", fields);
+    } catch (error) {
+      console.log("Error in insertToProductTable:", error);
+    }
+  }
+}

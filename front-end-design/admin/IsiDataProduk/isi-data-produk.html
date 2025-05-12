@@ -43,10 +43,43 @@
                     <input class="form-control" type="file" id="img-file">
                 </div>
 
-                <button class="btn btn-primary my-4 background-biru-laut">Tambahkan</button>
+                <button class="btn btn-primary my-4 background-biru-laut" id="add-product-button">Tambahkan</button>
             </form>
         </div>
     </main>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('add-product-button').addEventListener('onclick', function(event) {
+            event.preventDefault(); // Prevent default form submission
+        
+            const form = event.target;
+        
+            // Create a FormData object
+            const formData = new FormData();
+            formData.append('nama_produk', document.getElementById('nama-produk').value);
+            formData.append('harga_produk', document.getElementById('harga-produk').value);
+            formData.append('deskripsi_produk', document.getElementById('deskripsi-produk').value);
+        
+            const fileInput = document.getElementById('img-file');
+            if (fileInput.files.length > 0) {
+                formData.append('gambar', fileInput.files[0]);
+            }
+        
+            // Send the data using XMLHttpRequest
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/data/add', true);
+        
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    alert('Data berhasil dikirim!');
+                } else {
+                    alert('Gagal mengirim data: ' + xhr.status);
+                }
+            };
+        
+            xhr.send(formData);
+        });
+    </script>
+        
 </body>
 </html>
