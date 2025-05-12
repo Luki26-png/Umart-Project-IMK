@@ -17,11 +17,7 @@ app.set('view engine', 'pug');
 app.set('views', __dirname + "/" + 'Views');
 
 app.get('/', (_req, res) => {
-    res.send("<h1>Hello world</h1>");
-});
-
-app.get('/home', (_req, res)=>{
-  res.render("<h1>this is home path</h1>");
+    res.render('user/homepage.pug');
 });
 
 app.use('/api', product);
