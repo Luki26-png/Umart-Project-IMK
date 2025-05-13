@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Login</title>
+  <style>
+    /* Reset some browser styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body, html {
+      height: 100%;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #333;
+      min-height: 600px; /* Mobile height constraint */
+      padding: 20px;
+    }
+    .login-container {
+      background: #fff;
+      padding: 30px 25px;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      width: 100%;
+      max-width: 320px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    h2 {
+      margin-bottom: 20px;
+      color: #4a148c;
+      font-weight: 700;
+      text-align: center;
+    }
+    form {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    label {
+      font-weight: 600;
+      color: #5e35b1;
+      margin-bottom: 6px;
+      font-size: 0.9rem;
+    }
+    input[type="email"], input[type="password"] {
+      padding: 12px 15px;
+      margin-bottom: 18px;
+      border-radius: 8px;
+      border: 1.8px solid #b39ddb;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+      outline-offset: 2px;
+    }
+    input[type="email"]:focus, input[type="password"]:focus {
+      border-color: #6a1b9a;
+      outline: none;
+      box-shadow: 0 0 5px 1px rgba(106, 27, 154, 0.4);
+    }
+    button {
+      background-color: #6a1b9a;
+      color: white;
+      font-weight: 700;
+      font-size: 1.1rem;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-top: 8px;
+    }
+    button:hover {
+      background-color: #7b32c7;
+    }
+    @media (max-width: 360px) {
+      body, html {
+        padding: 15px;
+      }
+      .login-container {
+        padding: 25px 20px;
+        max-width: 100%;
+      }
+      input[type="email"], input[type="password"] {
+        padding: 10px 12px;
+        font-size: 0.95rem;
+      }
+      button {
+        font-size: 1rem;
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container" role="main" aria-label="Login form">
+    <h2>Login</h2>
+    <form action="/authentication/login" method="POST" novalidate>
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" placeholder="you@example.com" required autocomplete="email" />
+      
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" placeholder="Enter your password" required autocomplete="current-password" />
+      
+      <button type="submit" aria-label="Submit login form">Log In</button>
+    </form>
+  </div>
+</body>
+</html>
+

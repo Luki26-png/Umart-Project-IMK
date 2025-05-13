@@ -1,5 +1,7 @@
-import mysql, { Pool, PoolOptions } from 'mysql2/promise';
+import mysql, { Pool, PoolOptions, RowDataPacket } from 'mysql2/promise';
 import { ProductProps } from '../Models/productModel';
+import { AuthData } from '../Models/authModel';
+
 import dbAuth from './config';
 
 export class DatabaseService {
@@ -43,6 +45,26 @@ export class ProductService {
       console.log("Database Operation Field", fields);
     } catch (error) {
       console.log("Error in insertToProductTable:", error);
+    }
+  }
+}
+
+export class AuthService{
+  public async findUser(data: AuthData):Promise<RowDataPacket[]>{
+    const sqlQuery = `
+    select name, email, role, avatar, address, phone_number from users
+    where email = ? and password = ?`;
+    const values : string[] = [data.email, data.password];
+
+    try {
+      const pool = DatabaseService.getPool();
+      const [rows, _fields] = await pool.query<RowDataPacket[]>(sqlQuery, values);
+      // console.log(rows, "testestes");
+      // console.log(fields);
+      return rows;
+    } catch (error) {
+      console.log("Error in finding the users in AuthService.findUser\n", error);
+      return []
     }
   }
 }

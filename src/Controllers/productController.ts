@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import Product, {ProductProps} from "../Models/productModel";
+
 class ProductController{
     public async addNewProduct(req: Request, res: Response): Promise<void>{
         const productData : ProductProps = {

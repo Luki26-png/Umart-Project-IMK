@@ -1,12 +1,12 @@
 import express from 'express';
+import AuthController from '../Controllers/authController';
 
 const authentication = express.Router();
+const authController = new AuthController();
 
-authentication.get('/login', (_req, res)=>{
-    res.send("<h1>this is login route</h1>");
-});
+authentication.post('/login',authController.loginAttempt);
 
-authentication.get('/register', (_req, res)=>{
+authentication.post('/register', (_req, res)=>{
     res.send("<h1>this is register route</h1>");
 });
 

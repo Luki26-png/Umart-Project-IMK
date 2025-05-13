@@ -1,4 +1,4 @@
-import { ProductService, DatabaseService } from "../Config/db";
+import { ProductService} from "../Config/db";
 export interface ProductProps{
     id: number;
     name: string;
