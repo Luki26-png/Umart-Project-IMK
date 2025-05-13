@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { AuthModel, AuthData } from "../Models/authModel";
+import { AuthModel, AuthData, RegisterData } from "../Models/authModel";
 
 class AuthController{
     public async loginAttempt(req :Request, res : Response): Promise<void>{
@@ -30,7 +30,30 @@ class AuthController{
             throw new Error(`Error in AuthController.loginAttempt\n ${error}`);
         }
         
-    }  
+    }
+    
+    public async registerAttempt(req: Request, res: Response):Promise<void>{
+        const registerData : RegisterData = {
+            id: Math.round(Math.random() * 1E6),
+            name: req.body.name,
+            email: req.body.email,
+            password: req.body.password,
+        }
+
+        try {
+            const authModel : AuthModel = new AuthModel(registerData);
+            const registerSuccess : boolean = await authModel.register();
+            if(registerSuccess){
+                console.log(registerData);
+                res.send("<h2>anda berhasil mendaftar</h2>")
+            }else{
+                res.send("<h2>anda gagal mendaftar</h2>")
+            }
+        } catch (error) {
+            res.send("<h1>Error when trying to Register</h1>")
+            throw new Error(`Error in AuthController.registerAttempt\n ${error}`)
+        }
+    }
 }
 
 export default AuthController;

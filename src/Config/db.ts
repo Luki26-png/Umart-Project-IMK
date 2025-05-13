@@ -1,6 +1,6 @@
 import mysql, { Pool, PoolOptions, RowDataPacket } from 'mysql2/promise';
 import { ProductProps } from '../Models/productModel';
-import { AuthData } from '../Models/authModel';
+import { AuthData, RegisterData } from '../Models/authModel';
 
 import dbAuth from './config';
 
@@ -41,6 +41,7 @@ export class ProductService {
     try {
       const pool = DatabaseService.getPool();
       const [result, fields] = await pool.query(sqlQuery, values);
+      console.log(`successfully add new product, from ProductService.insertToProductTable`)
       console.log("Database Operation Result", result);
       console.log("Database Operation Field", fields);
     } catch (error) {
@@ -59,12 +60,31 @@ export class AuthService{
     try {
       const pool = DatabaseService.getPool();
       const [rows, _fields] = await pool.query<RowDataPacket[]>(sqlQuery, values);
-      // console.log(rows, "testestes");
+      console.log(`user with ${data.email} found, from AuthService.findUser`);
       // console.log(fields);
       return rows;
     } catch (error) {
       console.log("Error in finding the users in AuthService.findUser\n", error);
       return []
+    }
+  }
+
+  public async registerNewUser(data: RegisterData):Promise<boolean>{
+    const sqlQuery = `
+    INSERT INTO users (id, name, email, password) VALUES
+    (?,?,?,?);`;
+    const values = [data.id, data.name,data.email, data.password];
+
+    try {
+      const pool = DatabaseService.getPool();
+      const [result, _fields] = await pool.query(sqlQuery, values);
+      console.log("Success registering new User, from AuthService.registerNewUser");
+      console.log(result);
+      //console.log(fields);
+      return true;
+    } catch (error) {
+      console.log("Error in registering new User in AuthService.registerNewUser\n", error);
+      return false;
     }
   }
 }

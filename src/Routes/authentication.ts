@@ -6,8 +6,6 @@ const authController = new AuthController();
 
 authentication.post('/login',authController.loginAttempt);
 
-authentication.post('/register', (_req, res)=>{
-    res.send("<h1>this is register route</h1>");
-});
+authentication.post('/register', authController.registerAttempt);
 
 export default authentication;
