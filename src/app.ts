@@ -11,6 +11,7 @@ import session from 'express-session';
 import authentication from './Routes/authentication';
 import admin from './Routes/admin';
 import product from './Routes/product';
+import homepage from './Routes/homepage';
 
 const app = express();
 const port : number = 8080;
@@ -24,19 +25,11 @@ app.use(session({
 ));
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
-app.use('/public',express.static(__dirname + '/Public'));
 app.set('view engine', 'pug');
 app.set('views', __dirname + "/" + 'Views');
 
 app.get('/', (req, res) => {
-    //true if use has logged in
-    if (req.session.user_id) {
-      const userName = req.session.name;
-      res.render('user/homepage.pug', {name:userName});
-    }else{
-      res.render('user/homepage.pug', {name:null});
-    }
-    
+    res.redirect('/homepage/');
 });
 
 app.get('/login',(_req, res)=>{
@@ -49,6 +42,9 @@ app.get('/register', (_req, res)=>{
   res.sendFile(docPath);
 });
 
+app.use('/authentication', authentication);
+app.use('/homepage', homepage);
+
 app.get('/logout', (req, res)=>{
   console.log(req.session);
   req.session.destroy(_err => console.log("session has been destroyed"));
@@ -58,7 +54,7 @@ app.get('/logout', (req, res)=>{
 
 app.use('/api', product);
 app.use('/admin', admin);
-app.use('/authentication', authentication);
+
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);

@@ -34,27 +34,7 @@ class Product{
     // public getId(): number {
     //     return this.props.id;
     // }
-
-    // public getName(): string {
-    //     return this.props.name;
-    // }
-
-    // public getDescription(): string {
-    //     return this.props.description;
-    // }
-
-    // public getSummary(): string {
-    //     return this.props.summary;
-    // }
-
-    // public getCover(): string {
-    //     return this.props.cover;
-    // }
-
-    // public getCategory(): string {
-    //     return this.props.category;
-    // }
-
+    
     //add new product
     public async addNewProduct():Promise<string>{
         try {

@@ -48,6 +48,21 @@ export class ProductService {
       console.log("Error in insertToProductTable:", error);
     }
   }
+
+  public async retriveProductCardData(limit:number):Promise<RowDataPacket[]>{
+    const sqlQuery = `select id, name, summary, cover, category from products limit ?`;
+    const values : number[] = [limit];
+    try {
+      const pool = DatabaseService.getPool();
+      const [rows, _fields] = await pool.query<RowDataPacket[]>(sqlQuery, values);
+      console.log(`retrieve ${rows.length} product data, from ProductService.retrieveProductCardData`);
+      // console.log(fields);
+      return rows;
+    } catch (error) {
+      console.log("Error in retrieving product data in ProductService.retrieveProductCardData\n", error);
+      return []
+    }
+  }
 }
 
 export class AuthService{

@@ -63,17 +63,18 @@ html(lang="en")
             .border.py-4
                 h3.text-center.pb-0.fw-bold Rekomendasi Produk
                 .py-4.d-flex.flex-wrap.justify-content-center
-                    each val in [1, 2, 3]
+                    each card in cardList 
                         .card.mx-4.my-1(style="width: 20rem;")
-                            img.card-img-top(src="https://imageplaceholder.net/400x300", alt="...")
+                            img.card-img-top(src=`public/product_img/${card.cover}`, alt="card image")
                             .card-body
-                                h5.card-title Nama Produk
-                                p.card-text Some quick example text to build on the card title and make up the bulk of the card's content.
+                                h5.card-title #{card.name}
+                                p.card-text #{card.summary}
                                 p.biru-laut
                                     svg(xmlns="http://www.w3.org/2000/svg", x="0px", y="0px", width="20", height="20", viewBox="0,0,256,256")
                                         g(fill="#006094", fill-rule="nonzero", stroke="none", stroke-width="1", stroke-linecap="butt", stroke-linejoin="miter", stroke-miterlimit="10", stroke-dasharray="", stroke-dashoffset="0", font-family="none", font-weight="none", font-size="none", text-anchor="none", style="mix-blend-mode: normal")
-                                        g(transform="scale(5.12,5.12)")
-                                        path(d="M12.8125,2c-0.47656,0.08984 -0.82031,0.51172 -0.8125,1v44c-0.00391,0.35938 0.1875,0.69141 0.49609,0.87109c0.30859,0.18359 0.69141,0.18359 1.00391,0.00391l11.5,-6.71875l11.5,6.71875c0.3125,0.17969 0.69531,0.17969 1.00391,-0.00391c0.30859,-0.17969 0.5,-0.51172 0.49609,-0.87109v-44c0,-0.55078 -0.44922,-1 -1,-1h-24c-0.03125,0 -0.0625,0 -0.09375,0c-0.03125,0 -0.0625,0 -0.09375,0zM14,4h22v41.25l-10.5,-6.125c-0.30859,-0.17969 -0.69141,-0.17969 -1,0l-10.5,6.125z")
+                                            g(transform="scale(5.12,5.12)")
+                                                path(d="M12.8125,2c-0.47656,0.08984 -0.82031,0.51172 -0.8125,1v44c-0.00391,0.35938 0.1875,0.69141 0.49609,0.87109c0.30859,0.18359 0.69141,0.18359 1.00391,0.00391l11.5,-6.71875l11.5,6.71875c0.3125,0.17969 0.69531,0.17969 1.00391,-0.00391c0.30859,-0.17969 0.5,-0.51172 0.49609,-0.87109v-44c0,-0.55078 -0.44922,-1 -1,-1h-24c-0.03125,0 -0.0625,0 -0.09375,0c-0.03125,0 -0.0625,0 -0.09375,0zM14,4h22v41.25l-10.5,-6.125c-0.30859,-0.17969 -0.69141,-0.17969 -1,0l-10.5,6.125z")
+                                    | #{card.category}
                                 a.btn.btn-primary.background-biru-laut.w-100(href="#") Lihat
 
                 .d-flex.justify-content-center
