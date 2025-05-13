@@ -28,8 +28,15 @@ app.use('/public',express.static(__dirname + '/Public'));
 app.set('view engine', 'pug');
 app.set('views', __dirname + "/" + 'Views');
 
-app.get('/', (_req, res) => {
-    res.render('user/homepage.pug');
+app.get('/', (req, res) => {
+    //true if use has logged in
+    if (req.session.user_id) {
+      const userName = req.session.name;
+      res.render('user/homepage.pug', {name:userName});
+    }else{
+      res.render('user/homepage.pug', {name:null});
+    }
+    
 });
 
 app.get('/login',(_req, res)=>{

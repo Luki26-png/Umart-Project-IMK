@@ -71,9 +71,9 @@ export class AuthService{
 
   public async registerNewUser(data: RegisterData):Promise<boolean>{
     const sqlQuery = `
-    INSERT INTO users (id, name, email, password) VALUES
-    (?,?,?,?);`;
-    const values = [data.id, data.name,data.email, data.password];
+    INSERT INTO users (id, name, email, role, password) VALUES
+    (?,?,?,?,?);`;
+    const values = [data.id, data.name,data.email, data.role, data.password];
 
     try {
       const pool = DatabaseService.getPool();

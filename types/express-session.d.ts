@@ -6,8 +6,8 @@ declare module "express-session" {
     name: string;
     email: string;
     role: string;
-    avatar: string;
-    address: string;
-    phone_number: string;
+    avatar: string|null;
+    address: string|null;
+    phone_number: string|null;
   }
 }

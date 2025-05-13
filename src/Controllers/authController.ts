@@ -37,6 +37,7 @@ class AuthController{
             id: Math.round(Math.random() * 1E6),
             name: req.body.name,
             email: req.body.email,
+            role: "user",
             password: req.body.password,
         }
 
