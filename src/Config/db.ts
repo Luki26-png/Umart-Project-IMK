@@ -52,7 +52,7 @@ export class ProductService {
 export class AuthService{
   public async findUser(data: AuthData):Promise<RowDataPacket[]>{
     const sqlQuery = `
-    select name, email, role, avatar, address, phone_number from users
+    select id, name, email, role, avatar, address, phone_number from users
     where email = ? and password = ?`;
     const values : string[] = [data.email, data.password];
 

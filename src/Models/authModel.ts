@@ -15,13 +15,13 @@ export class AuthModel{
         this.authService = new AuthService();
     }
 
-    public async login(): Promise<RowDataPacket[]|null>{
+    public async login(): Promise<RowDataPacket|null>{
         try {
            const loginResult : RowDataPacket[] = await this.authService.findUser(this.authData);
            if (loginResult.length == 0){
                 return null;
            }
-           return loginResult;
+           return loginResult[0];
         } catch (error) {
             console.error("Login error:", error);
             return null;

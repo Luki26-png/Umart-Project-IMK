@@ -42,6 +42,13 @@ app.get('/register', (_req, res)=>{
   res.sendFile(docPath);
 });
 
+app.get('/logout', (req, res)=>{
+  console.log(req.session);
+  req.session.destroy(_err => console.log("session has been destroyed"));
+  res.clearCookie("user_id");
+  res.send("<h1>You've logout</h1>")
+});
+
 app.use('/api', product);
 app.use('/admin', admin);
 app.use('/authentication', authentication);

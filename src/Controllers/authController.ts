@@ -11,9 +11,19 @@ class AuthController{
             const authModel : AuthModel = new AuthModel(loginData);
             const userData =  await authModel.login();
             if (userData == null) {
-                res.send("<h1>user tidak terdaftar didatabase</h1>") 
+                res.send("<h1> tidak terdaftar didatabase</h1>") 
+            }else{
+                console.log(userData);
+                res.cookie("user_id", userData.id);
+                req.session.user_id = userData.id;
+                req.session.name = userData.name;
+                req.session.email = userData.email;
+                req.session.role = userData.role;
+                req.session.avatar = userData.avatar;
+                req.session.address = userData.address;
+                req.session.phone_number = userData.phone_number;
+                res.send("<h1>user terdaftar didatabase</h1>")  
             }
-            res.send("<h1>user terdaftar didatabase</h1>")   
         } catch (error) {
             res.send("<h1>error woy</h1>")
             //res.status(500).json({ error: 'Internal server error' });
