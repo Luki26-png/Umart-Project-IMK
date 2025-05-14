@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import ProductCardListModel from "../Models/productCardModel";
-import Product, {ProductProps} from "../Models/productModel";
+import Product, {ProductProps, ProductDetail} from "../Models/productModel";
 
 class ProductController{
     public async addNewProduct(req: Request, res: Response): Promise<void>{
@@ -40,6 +40,34 @@ class ProductController{
             throw new Error("Erorr showing product list, from ProductController.showProductCardList");
         }
         
+    }
+
+    public async showProductDetail(req: Request, res: Response){
+        let productId: number = Number(req.query.id);
+        let productCardListLimit: number = 3;
+        try {
+
+            const productDetailModel = new ProductDetail();
+            const productCardListModel = new ProductCardListModel(productCardListLimit);
+
+            const productDetailData = await productDetailModel.getOneProduct(productId);
+            const cardList = await productCardListModel.retrieveCardList();//ubah yang ini agar produk yang sama tidak muncul pada hal produk detail
+            if (productDetailData == null) {
+                res.render("<h1>server error</h1>")
+                throw Error(`Error, product with id ${productId} doesn't exist`);
+            }
+            //check if user had logged in
+            if(req.session.user_id){
+                let userName = req.session.username;
+                res.render('user/detailproduk.pug', {name:userName, cardList:cardList, product:productDetailData});
+            }else{
+                res.render('user/detailproduk.pug', {name:null, cardList:cardList, product:productDetailData});
+            }
+            
+        } catch (error) {
+            res.send("<h1>server error</h1>")
+            throw new Error("Error showing product detail, from ProductController.showProductDetail");
+        }
     }
 }
 

@@ -75,13 +75,14 @@ html(lang="en")
                                             g(transform="scale(5.12,5.12)")
                                                 path(d="M12.8125,2c-0.47656,0.08984 -0.82031,0.51172 -0.8125,1v44c-0.00391,0.35938 0.1875,0.69141 0.49609,0.87109c0.30859,0.18359 0.69141,0.18359 1.00391,0.00391l11.5,-6.71875l11.5,6.71875c0.3125,0.17969 0.69531,0.17969 1.00391,-0.00391c0.30859,-0.17969 0.5,-0.51172 0.49609,-0.87109v-44c0,-0.55078 -0.44922,-1 -1,-1h-24c-0.03125,0 -0.0625,0 -0.09375,0c-0.03125,0 -0.0625,0 -0.09375,0zM14,4h22v41.25l-10.5,-6.125c-0.30859,-0.17969 -0.69141,-0.17969 -1,0l-10.5,6.125z")
                                     | #{card.category}
-                                a.btn.btn-primary.background-biru-laut.w-100(href="#", id=card.id) Lihat
+                                a.btn.btn-primary.background-biru-laut.w-100(href="#", id=card.id, onclick='showDetail(event)') Lihat
 
                 .d-flex.justify-content-center
                     a.text-white.text-decoration-none.px-5.py-1.rounded-1.d-block.background-biru-laut(href="/user/product-list") Lihat Selengkapnya
 
     include ../footer.pug
     script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js")
+    script(src="public/script/productDetail.js")
     script.
         window.onload = ()=>{
             const navMenu = document.getElementById('nav-home');

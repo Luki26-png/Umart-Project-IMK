@@ -44,10 +44,41 @@ class Product{
             throw new Error("Failed to add new product ");
         }
     }
-
     //returning data to controllers
     public toJSON(): ProductProps{
         return {...this.props};
+    }
+}
+
+export class ProductDetail{
+    private productService: ProductService;
+
+    public constructor(){
+        this.productService = new ProductService();
+    }
+
+    public async getOneProduct(id:number):Promise<ProductProps|null>{
+        try {
+            const retrieveData = await this.productService.retrieveOneData(id);
+            if (retrieveData.length == 0) {
+                console.log(`Product with id ${id} doesn't exist, from ProductCardList.getOneProduct`);
+                return null;
+            }
+            const props : ProductProps = {
+                cover : retrieveData[0].cover,
+                id : retrieveData[0].id,
+                name : retrieveData[0].name,
+                description : retrieveData[0].description,
+                price : retrieveData[0].price,
+                summary : retrieveData[0].summary,
+                category : retrieveData[0].category   
+            }
+            return props;
+            
+        } catch (error) {
+            console.error(`error retrieving product with id ${id}, from ProductCardList.getOneProduct`)
+            return null;
+        }
     }
 }
 

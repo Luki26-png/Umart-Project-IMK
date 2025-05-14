@@ -25,7 +25,7 @@ class ProductCardListModel{
                 console.log("The products table in database is empty, from ProductCardList.retrieveCardList");
                 return [];
             }
-            console.log("disini kepanggil")
+            //console.log("disini kepanggil")
             //loop through retrieve array of Data and put it into cadList 
             for (let index = 0; index < retrievedData.length; index++) {
                 this.cardList.push(<ProductCardProps>{

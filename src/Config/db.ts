@@ -49,6 +49,20 @@ export class ProductService {
     }
   }
 
+  public async retrieveOneData(id:number):Promise<RowDataPacket[]>{
+    const sqlQuery = `select * from products where id = ?`;
+    const values : number[] = [id];
+    try {
+      const pool = DatabaseService.getPool();
+      const [rows, _fields] = await pool.query<RowDataPacket[]>(sqlQuery, values);
+      return rows;
+    } catch (error) {
+      console.log("Error in retrieving product data in ProductService.retrieveOneData\n", error);
+      return []
+    }
+    
+  }
+
   public async retriveProductCardData(limit:number):Promise<RowDataPacket[]>{
     const sqlQuery = `select id, name, summary, cover, category from products limit ?`;
     const values : number[] = [limit];
