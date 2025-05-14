@@ -10,6 +10,7 @@ import session from 'express-session';
 //routes
 import authentication from './Routes/authentication';
 import admin from './Routes/admin';
+import user from './Routes/user';
 import product from './Routes/product';
 import homepage from './Routes/homepage';
 
@@ -33,12 +34,12 @@ app.get('/', (req, res) => {
 });
 
 app.get('/login',(_req, res)=>{
-  const docPath = __dirname + "/login.html";
+  const docPath = __dirname + "/Public/static_html/login.html";
   res.sendFile(docPath);
 });
 
 app.get('/register', (_req, res)=>{
-  const docPath = __dirname + "/register.html";
+  const docPath = __dirname + "/Public/static_html/register.html";
   res.sendFile(docPath);
 });
 
@@ -52,9 +53,9 @@ app.get('/logout', (req, res)=>{
   res.send("<h1>You've logout</h1>")
 });
 
+app.use('/user', user);
 app.use('/api', product);
 app.use('/admin', admin);
-
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);

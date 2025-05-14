@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { AuthModel, AuthData, RegisterData } from "../Models/authModel";
+import { getFirstWord } from "../Logics/stringMod";
 
 class AuthController{
     public async loginAttempt(req :Request, res : Response): Promise<void>{
@@ -17,12 +18,13 @@ class AuthController{
                 res.cookie("user_id", userData.id);
                 req.session.user_id = userData.id;
                 req.session.name = userData.name;
+                req.session.username = getFirstWord(userData.name);
                 req.session.email = userData.email;
                 req.session.role = userData.role;
                 req.session.avatar = userData.avatar;
                 req.session.address = userData.address;
                 req.session.phone_number = userData.phone_number;
-                res.send("<h1>user terdaftar didatabase</h1>")  
+                res.redirect('/');
             }
         } catch (error) {
             res.send("<h1>error woy</h1>")
