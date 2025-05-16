@@ -52,7 +52,7 @@ class ProductController{
             const productCardListModel = new ProductCardListModel(productCardListLimit);
 
             const productDetailData = await productDetailModel.getOneProduct(productId);
-            const cardList = await productCardListModel.retrieveCardList();//ubah yang ini agar produk yang sama tidak muncul pada hal produk detail
+            const cardList = await productCardListModel.retrieveCardListExcludingId(productId);
             if (productDetailData == null) {
                 res.render("<h1>server error</h1>")
                 throw Error(`Error, product with id ${productId} doesn't exist`);

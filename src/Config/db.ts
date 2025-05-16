@@ -78,6 +78,23 @@ export class ProductService {
       return []
     }
   }
+
+  public async retrieveProductCardDataExcludingId(limit: number, idToExclude: number): Promise<RowDataPacket[]> {
+    const sqlQuery = `
+    SELECT id, name, summary, cover, category FROM products
+    WHERE id != ? LIMIT ?;`;
+    const values : number[] = [idToExclude, limit];
+    try {
+      const pool = DatabaseService.getPool();
+      const [rows, _fields] = await pool.query<RowDataPacket[]>(sqlQuery, values);
+      console.log(`Retrieved ${rows.length} product cards excluding ID: ${idToExclude}, from ProductService.retrieveProductCardDataExcludingId`);
+      return rows;
+     
+    } catch (error) {
+      console.log("Error in finding product cards excluding ID in ProductService.retrieveProductCardDataExcludingId\n", error);
+      return []
+    }
+  }
 }
 
 export class AuthService{

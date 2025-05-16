@@ -25,20 +25,48 @@ class ProductCardListModel{
                 console.log("The products table in database is empty, from ProductCardList.retrieveCardList");
                 return [];
             }
-            //console.log("disini kepanggil")
-            //loop through retrieve array of Data and put it into cadList 
-            for (let index = 0; index < retrievedData.length; index++) {
-                this.cardList.push(<ProductCardProps>{
-                    id: retrievedData[index].id,
-                    name: retrievedData[index].name,
-                    summary: retrievedData[index].summary,
-                    cover: retrievedData[index].cover,
-                    category: retrievedData[index].category,
-                });
-            }
+            // Map retrieved data to ProductCardProps and update this.cardList
+            this.cardList = retrievedData.map(data => ({
+                id: data.id,
+                name: data.name,
+                summary: data.summary,
+                cover: data.cover,
+                category: data.category,
+            } as ProductCardProps));
+
             return this.cardList;
         } catch (error) {
             console.error(`Error retrieve product Card List, from ProductCardList.retrieveCardList\n`, error);
+            return [];
+        }
+    }
+
+    /**
+     * Retrieves a list of product cards, excluding a product with a specific ID.
+     * The number of cards retrieved is limited by this.cardLimit.
+     * @param idToExclude The ID of the product to exclude from the list.
+     * @returns A promise that resolves to an array of ProductCardProps.
+     */
+    public async retrieveCardListExcludingId(idToExclude: number): Promise<ProductCardProps[]> {
+        try {
+            const retrievedData = await this.productService.retrieveProductCardDataExcludingId(this.cardLimit, idToExclude);
+
+            if (retrievedData.length === 0) {
+                console.log(`No products found (excluding ID: ${idToExclude}), from ProductCardListModel.retrieveCardListExcludingId`);
+                this.cardList = []; // Clear or set to empty if no results
+                return this.cardList;
+            }
+
+            this.cardList = retrievedData.map(data => ({
+                id: data.id,
+                name: data.name,
+                summary: data.summary,
+                cover: data.cover,
+                category: data.category,
+            } as ProductCardProps));
+            return this.cardList;
+        } catch (error) {
+            console.error(`Error retrieving product card list (excluding ID: ${idToExclude}), from ProductCardListModel.retrieveCardListExcludingId\n`, error);
             return [];
         }
     }
