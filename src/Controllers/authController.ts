@@ -14,7 +14,7 @@ class AuthController{
             if (userData == null) {
                 res.send("<h1> tidak terdaftar didatabase</h1>") 
             }else{
-                console.log(userData);
+                //console.log(userData);
                 res.cookie("user_id", userData.id);
                 req.session.user_id = userData.id;
                 req.session.name = userData.name;
