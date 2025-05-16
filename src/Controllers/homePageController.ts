@@ -11,9 +11,10 @@ class HomePageController{
             //true if use has logged in
             if (req.session.user_id) {
                 let userName = req.session.username;
-                res.render('user/homepage.pug', {name:userName, cardList:cardList});
+                let avatar = req.session.avatar;
+                res.render('user/homepage.pug', {name:userName, avatar:avatar, cardList:cardList});
             }else{
-                res.render('user/homepage.pug', {name:null, cardList:cardList});
+                res.render('user/homepage.pug', {name:null, avatar:null, cardList:cardList});
             }  
         } catch (_error) {
             res.send("<h1>Server Error</h1>");

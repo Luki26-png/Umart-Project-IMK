@@ -50,7 +50,7 @@ app.get('/logout', (req, res)=>{
   console.log(req.session);
   req.session.destroy(_err => console.log("session has been destroyed"));
   res.clearCookie("user_id");
-  res.send("<h1>You've logout</h1>")
+  res.redirect('/homepage/');
 });
 
 app.use('/user', user);

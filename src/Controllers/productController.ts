@@ -31,9 +31,10 @@ class ProductController{
             const cardList = await productCardListModel.retrieveCardList();
             if (req.session.user_id) {
                 let userName = req.session.username;
-                res.render('user/daftarproduk.pug', {name:userName, cardList:cardList});
+                let avatar = req.session.avatar;
+                res.render('user/daftarproduk.pug', {name:userName, avatar:avatar, cardList:cardList});
             }else{
-                res.render('user/daftarproduk.pug', {name:null, cardList:cardList});
+                res.render('user/daftarproduk.pug', {name:null, avatar:null, cardList:cardList});
             } 
         } catch (error) {
             res.send("<h1>server error</h1>")
@@ -59,9 +60,10 @@ class ProductController{
             //check if user had logged in
             if(req.session.user_id){
                 let userName = req.session.username;
-                res.render('user/detailproduk.pug', {name:userName, cardList:cardList, product:productDetailData});
+                let avatar = req.session.avatar;
+                res.render('user/detailproduk.pug', {name:userName, avatar:avatar, cardList:cardList, product:productDetailData});
             }else{
-                res.render('user/detailproduk.pug', {name:null, cardList:cardList, product:productDetailData});
+                res.render('user/detailproduk.pug', {name:null, avatar:null, cardList:cardList, product:productDetailData});
             }
             
         } catch (error) {

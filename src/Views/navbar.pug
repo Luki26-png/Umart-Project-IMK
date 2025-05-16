@@ -20,14 +20,17 @@ nav.container-fluid.border.px-0
         img#notification-icon.d-block.mx-4(width="30", height="30", src="public/icons/notification-48.png", alt="notification")
       if name
         .d-flex.justify-content-start.align-content-center
-          #navbar-profile-picture(style="background-image: url('https://imageplaceholder.net/600');")
+          if avatar
+            #navbar-profile-picture(style=`background-image: url('public/user_avatar/${avatar}');`)
+          else
+            #navbar-profile-picture(style="background-image: url('https://imageplaceholder.net/600');")
           .dropdown.d-flex.justify-content-between.align-content-center
             button#profile-dropdown.border-0.bg-transparent.dropdown-toggle.text-center(type="button", data-bs-toggle="dropdown", aria-expanded="false")
               | #{name}
             ul.dropdown-menu(aria-labelledby="profile-dropdown")
               li
-                a.dropdown-item(href="#") Profile
+                a.dropdown-item(href="/user/profile") Profile
               li
-                a.dropdown-item.text-danger(href="#") Logout
+                a.dropdown-item.text-danger(href="/logout") Logout
       else
-        a#login-button.text-decoration-none.fw-bold.d-block.biru-laut.biru-laut-border-nav.px-3.py-1.rounded-1.text-center(href="#") Masuk
+        a#login-button.text-decoration-none.fw-bold.d-block.biru-laut.biru-laut-border-nav.px-3.py-1.rounded-1.text-center(href="/login") Masuk
