@@ -24,6 +24,9 @@ user.get('/', (req, res)=>{
     res.send("<h1>this is user route</h1>")
 });
 
+user.get('/cart', (_req, res)=>{
+    res.render('user/keranjang.pug', {name:null, avatar:null});
+});
 user.get('/add-product',productController.showProductDetailPrice);
 user.get('/product-detail', productController.showProductDetail);
 user.get('/product-list',productController.showProductCardList);

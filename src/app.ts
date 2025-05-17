@@ -29,7 +29,7 @@ app.use(express.urlencoded({extended:true}));
 app.set('view engine', 'pug');
 app.set('views', __dirname + "/" + 'Views');
 
-app.get('/', (req, res) => {
+app.get('/', (_req, res) => {
     res.redirect('/homepage/');
 });
 
