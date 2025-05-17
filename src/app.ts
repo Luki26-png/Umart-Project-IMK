@@ -13,6 +13,7 @@ import admin from './Routes/admin';
 import user from './Routes/user';
 import product from './Routes/product';
 import homepage from './Routes/homepage';
+import cart from './Routes/cart';
 
 const app = express();
 const port : number = 8080;
@@ -55,6 +56,7 @@ app.get('/logout', (req, res)=>{
 
 app.use('/user', user);
 app.use('/api', product);
+app.use('/api', cart);
 app.use('/admin', admin);
 
 app.listen(port, () => {

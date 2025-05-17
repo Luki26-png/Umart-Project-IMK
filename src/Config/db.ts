@@ -2,9 +2,10 @@ import mysql, { Pool, PoolOptions, RowDataPacket } from 'mysql2/promise';
 import { ProductProps } from '../Models/productModel';
 import { AuthData, RegisterData } from '../Models/authModel';
 import { UserUpdateProps } from '../Models/userModel';
-import { CartProps } from '../Models/cartModel';
+import { CartProps, CartModel, CartItemProps } from '../Models/cartModel';
 
 import dbAuth from './config';
+import cart from '../Routes/cart';
 
 export class DatabaseService {
   private static pool: Pool;
@@ -185,19 +186,53 @@ export class UserService{
   }
 }
 
+//dealing with cart table
 export class CartService{
   public async insertToCartTable(props:CartProps):Promise<boolean>{
     const sqlQuery = `INSERT INTO carts (id, user_id, total) VALUES (?,?,?);`;
     const values : number[] = [props.id, props.user_id, props.total];
     try {
       const pool = DatabaseService.getPool();
-      const [result, _fields] = await pool.query(sqlQuery, values);
+      const [_result, _fields] = await pool.query(sqlQuery, values);
       console.log("Success initializing new cart, from CartService.insertToCartTable");
       //console.log(result);
       //console.log(fields);
       return true;
     } catch (error) {
       throw new Error("Error initializing new cart in CartService.insertToCartTable");
+    }
+  }
+}
+
+//dealing with cart item table
+export class CartItemService{
+  public async insertToCartItemTable(props: CartItemProps):Promise<boolean>{
+    const sqlQuery = `INSERT INTO cart_items (id, cart_id, product_id, quantity) VALUES (?,?,?,?);`;
+    const values : number[] = [props.id, props.cart_id, props.product_id, props.quantity];
+    try {
+      const pool = DatabaseService.getPool();
+      const [_result, _fields] = await pool.query(sqlQuery, values);
+      console.log("Success adding new item to cart_items, from CartItemService.insertToCartItemTable");
+      return true;
+    } catch (error) {
+      console.error("Error adding new item to cart_items, from CartItemService.insertToCartItemTable\n", error);
+      return false;
+    }
+  }
+
+  public async isItemInCart(cart_id: number, product_id: number):Promise<boolean>{
+    const sqlQuery = `SELECT id FROM cart_items WHERE cart_id = ? and product_id = ?;`;
+    const values : number[] = [cart_id, product_id];
+    try {
+      const pool = DatabaseService.getPool();
+      const [rows, _fields] = await pool.query<RowDataPacket[]>(sqlQuery, values);
+      if (rows.length == 0) {
+        return false;
+      }
+      return true;
+    } catch (error) {
+        console.error("Fail to check for Item in a a cart, from CartItemService.isItemInCart");
+        return false;
     }
   }
 }
