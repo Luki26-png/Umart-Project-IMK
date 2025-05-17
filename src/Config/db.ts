@@ -2,6 +2,7 @@ import mysql, { Pool, PoolOptions, RowDataPacket } from 'mysql2/promise';
 import { ProductProps } from '../Models/productModel';
 import { AuthData, RegisterData } from '../Models/authModel';
 import { UserUpdateProps } from '../Models/userModel';
+import { CartProps } from '../Models/cartModel';
 
 import dbAuth from './config';
 
@@ -100,8 +101,13 @@ export class ProductService {
 export class AuthService{
   public async findUser(data: AuthData):Promise<RowDataPacket[]>{
     const sqlQuery = `
-    select id, name, email, role, avatar, address, phone_number from users
-    where email = ? and password = ?`;
+      select 
+      users.id, users.name, users.email, users.role, 
+      users.avatar, users.address, users.phone_number, 
+      carts.id as cart_id 
+      from users
+      inner join carts on users.id = carts.user_id
+      where email = ? and password = ?;`;
     const values : string[] = [data.email, data.password];
 
     try {
@@ -175,6 +181,23 @@ export class UserService{
     } catch (error) {
       console.error(`Error updating user ${id} in UserService.updateUserTable:`, error);
       return false;
+    }
+  }
+}
+
+export class CartService{
+  public async insertToCartTable(props:CartProps):Promise<boolean>{
+    const sqlQuery = `INSERT INTO carts (id, user_id, total) VALUES (?,?,?);`;
+    const values : number[] = [props.id, props.user_id, props.total];
+    try {
+      const pool = DatabaseService.getPool();
+      const [result, _fields] = await pool.query(sqlQuery, values);
+      console.log("Success initializing new cart, from CartService.insertToCartTable");
+      //console.log(result);
+      //console.log(fields);
+      return true;
+    } catch (error) {
+      throw new Error("Error initializing new cart in CartService.insertToCartTable");
     }
   }
 }

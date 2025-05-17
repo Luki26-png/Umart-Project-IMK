@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { AuthModel, AuthData, RegisterData } from "../Models/authModel";
+import { CartModel, CartProps } from "../Models/cartModel";
 import { getFirstWord } from "../Logics/stringMod";
 
 class AuthController{
@@ -24,6 +25,7 @@ class AuthController{
                 req.session.avatar = userData.avatar;
                 req.session.address = userData.address;
                 req.session.phone_number = userData.phone_number;
+                req.session.cart_id = userData.cart_id;
                 res.redirect('/');
             }
         } catch (error) {
@@ -41,12 +43,26 @@ class AuthController{
             email: req.body.email,
             role: "user",
             password: req.body.password,
-        }
+        };
+
+        //cart for the new user
+        const newUserCart : CartProps={
+            id: Math.round(Math.random() * 1E6),
+            user_id: registerData.id,
+            total: 0
+        };
 
         try {
+            //initialize models
             const authModel : AuthModel = new AuthModel(registerData);
+            const cartModel : CartModel = new CartModel(newUserCart);
+
+            //register new user
             const registerSuccess : boolean = await authModel.register();
-            if(registerSuccess){
+            //initialize new cart for new user
+            const initializeCartSuccess : boolean = await cartModel.initializeCart();
+
+            if(registerSuccess && initializeCartSuccess){
                 console.log(registerData);
                 res.send("<h2>anda berhasil mendaftar</h2>")
             }else{

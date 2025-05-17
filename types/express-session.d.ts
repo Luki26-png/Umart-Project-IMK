@@ -10,5 +10,6 @@ declare module "express-session" {
     avatar: string|null;
     address: string|null;
     phone_number: string|null;
+    cart_id: number;
   }
 }
