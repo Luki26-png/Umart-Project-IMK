@@ -67,15 +67,11 @@ html(lang="en")
     include ../footer.pug
     script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js")
     script(src="public/script/userAddProduct.js")
+    script(src="public/script/global.js")
     script.
         window.onload = ()=>{
             const navMenu = document.getElementById('nav-produk');
             navMenu.className = 'd-flex flex-wrap align-content-center border-bottom border-2 border-primary';
             navMenu.childNodes[0].style.fontWeight = "bold";
         }
-
-        let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-        let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-          return new bootstrap.Tooltip(tooltipTriggerEl)
-        })
     

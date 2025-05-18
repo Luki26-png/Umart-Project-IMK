@@ -19,6 +19,17 @@ html(lang="en")
       .delete-cart-item:hover{
         cursor:pointer;
       }
+
+      #successAlert {
+        position: fixed;
+        top: 1rem;
+        left: 1rem;
+        z-index: 1055; /* Above modals but below navbar if needed */
+        width: auto;
+        max-width: 300px;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+      }
+
       @media screen and (max-width:575px) {
         .keranjang-card-body {
           padding: 1em 0em !important;
@@ -26,13 +37,15 @@ html(lang="en")
       }
   body
     include ../navbar.pug
+    #successAlert.alert.alert-success.d-none(role='alert')
+      | Item berhasil dihapus dari keranjang.
     main.container-fluid
       .row
         .col-lg-6.border.py-5.ps-5.pe-5.overflow-auto(style="height:905px;")
           h3.w-75.border-bottom.fw-bold.py-4.mb-5 Keranjangku
           if cartItems
             each item in cartItems
-              .card.mb-3.border-0(style="max-width: 100%;")
+              .card.mb-3.border-0(style="max-width: 100%;", id=item.id)
                 .row.g-0
                   .col-sm-4
                     img.img-fluid.rounded-start(style="width:300px;",src=`public/product_img/${item.cover}`, alt="img")
@@ -47,7 +60,7 @@ html(lang="en")
                           span.px-3 X
                         .row.px-3
                           .btn.col.border.py-2.rounded-1.text-center.py-1.px-3.number-operation(onclick='substractQuantity(event)') -
-                          .col.border.py-2.text-center.mx-2.rounded-1.py-1.px-3(style='width:55px;') 1
+                          .col.border.py-2.text-center.mx-2.rounded-1.py-1.px-3(style='width:55px;') #{item.quantity}
                           .btn.col.border.py-2.rounded-1.text-center.py-1.px-3.number-operation(onclick='addQuantity(event)') +
           else 
             h4 your cart is empty
@@ -55,7 +68,10 @@ html(lang="en")
         .col-lg-6.border.py-5.ps-5.pe-5.background-biru-muda-50
           h3.w-75.border-bottom.fw-bold.py-4.mb-5 Data Pemesanan
           h5.mb-5.fw-bold Total :
-            span.fw-bold Rp 1.600.000
+            if cartTotal
+              span.fw-bold Rp #{cartTotal}
+            else 
+              span.fw-bold Rp 0
           form
             .mb-3
               label.form-label.fw-medium(for="name") Nama
@@ -72,11 +88,20 @@ html(lang="en")
             button.btn.btn-primary.background-biru-laut.text-white.w-100.mt-5.mb-3 Checkout
             p.text-wrap
               small Data pribadi Anda akan digunakan untuk memproses pesanan Anda, mendukung pengalaman Anda di seluruh situs web ini, dan untuk tujuan lain yang dijelaskan dalam kebijakan privasi kami. Garansi uang kembali 30 hari.
+    
+    #confirmDeleteModal.modal.fade(tabindex='-1', aria-labelledby='confirmDeleteModalLabel', aria-hidden='true')
+      .modal-dialog
+        .modal-content
+          .modal-header
+            h5#confirmDeleteModalLabel.modal-title Konfirmasi Penghapusan
+            button.btn-close(type='button', data-bs-dismiss='modal', aria-label='Tutup')
+          .modal-body
+            | Apakah Anda yakin ingin menghapus item ini dari keranjang?
+          .modal-footer
+            button.btn.btn-secondary(type='button', data-bs-dismiss='modal') Batal
+            button#confirmDeleteBtn.btn.btn-danger(type='button') Hapus
+    
     include ../footer.pug
     script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js")
     script(src="public/script/keranjang.js")
-    script. 
-      let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-        let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-          return new bootstrap.Tooltip(tooltipTriggerEl)
-        })
+    script(src="public/script/global.js")

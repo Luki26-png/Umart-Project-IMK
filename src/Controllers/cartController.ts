@@ -65,7 +65,7 @@ class CartController{
                 return;
             }
             //console.log(cartItemData);
-            res.render('user/keranjang.pug', {name:userName, avatar:avatar, cartItems: cartItemData});
+            res.render('user/keranjang.pug', {name:userName, avatar:avatar, cartItems: cartItemData.productData, cartTotal: cartItemData.cartTotal});
         } catch (error) {
             throw new Error(`Error showing product cart, from CartController.showCart\n ${error}`);
         }

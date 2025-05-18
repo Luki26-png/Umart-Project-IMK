@@ -16,8 +16,8 @@ nav.container-fluid.border.px-0
 
     #navbar-icon.d-sm-flex.flex-sm-wrap.justify-content-between.align-content-center
       .d-flex.justify-content-between.align-content-center
-        img#cart-icon.d-block(width="30", height="30", src="public/icons/cart-60.png", alt="shopping-cart")
-        img#notification-icon.d-block.mx-4(width="30", height="30", src="public/icons/notification-48.png", alt="notification")
+        img#nav-cart-icon.d-block(width="30", height="30", src="public/icons/cart-60.png", alt="shopping-cart",  data-bs-toggle="tooltip", title="Lihat Keranjang")
+        img#nav-notification-icon.d-block.mx-4(width="30", height="30", src="public/icons/notification-48.png", alt="notification",  data-bs-toggle="tooltip", title="notifikasi")
       if name
         .d-flex.justify-content-start.align-content-center
           if avatar
@@ -33,4 +33,4 @@ nav.container-fluid.border.px-0
               li
                 a.dropdown-item.text-danger(href="/logout") Logout
       else
-        a#login-button.text-decoration-none.fw-bold.d-block.biru-laut.biru-laut-border-nav.px-3.py-1.rounded-1.text-center(href="/login") Masuk
+        a#login-button.text-decoration-none.fw-bold.d-block.biru-laut.biru-laut-border-nav.px-3.py-1.rounded-1.text-center(href="/login") Masuk 

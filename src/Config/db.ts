@@ -174,9 +174,9 @@ export class UserService{
     
     try {
       const pool = DatabaseService.getPool();
-      const [result, _fields] = await pool.query(sqlQuery, queryValues);
+      const [_result, _fields] = await pool.query(sqlQuery, queryValues);
       console.log(`User ${id} updated successfully. from UserService.updateUserTable`);
-      console.log(`Database Operation Result:`, result);
+      //console.log(`Database Operation Result:`, result);
       // A more robust check could be: (result as any).affectedRows > 0
       return true; 
     } catch (error) {

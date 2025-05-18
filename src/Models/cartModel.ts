@@ -1,6 +1,6 @@
 import { CartService, CartItemService } from "../Config/db";
 import { RowDataPacket } from "mysql2";
-import cart from "../Routes/cart";
+import formatNumberString from "../Logics/numberFormatter";
 
 export interface CartProps{
     id: number;
@@ -96,7 +96,7 @@ export class CartItemModel{
         }
     }
 
-    public async getCartItem():Promise<RowDataPacket[]|null>{
+    public async getCartItem(): Promise< {productData:RowDataPacket[], cartTotal:string} | null> {
         if (!this.isNumber(this.props)) {
             throw new Error("The data type must be number | cart_id to delete product, from CartItemModel.deleteCartItem");
         }
@@ -106,7 +106,17 @@ export class CartItemModel{
                 console.log(`Fail to retrieve cart items, cart with id = ${this.props} is empty, from CartItemModel.getCartItem`);
                 return null;
             }
-            return cartItemData;
+            //get the total price of the cart
+            let cartTotalPrice : number = 0;
+            cartItemData.forEach((item)=>{
+                cartTotalPrice += parseInt(item.price, 10) * item.quantity;
+            });
+            let formattedCartTotalPrice : string = formatNumberString(cartTotalPrice.toString());
+            //format the price of each cart item to have thousand separator
+            cartItemData.forEach((item)=>{
+                item.price = formatNumberString(item.price);
+            });
+            return {productData : cartItemData, cartTotal: formattedCartTotalPrice};
         } catch (error) {
             console.error(`Error retrieveing cart items data,  from CartItemModel.getCartItem\n`, error);
             return null;

@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import formatNumberString from "../Logics/numberFormatter";
 import ProductCardListModel from "../Models/productCardModel";
 import Product, {ProductProps, ProductDetail} from "../Models/productModel";
 
@@ -85,6 +86,8 @@ class ProductController{
                 res.render("<h1>server error</h1>")
                 throw Error(`Error, product with id ${productId} doesn't exist`);
             }
+            //formated the price to have thousand separator
+            productDetailData.price = formatNumberString(productDetailData.price)
             let userName = req.session.username;
             let avatar = req.session.avatar;
             res.render('user/tambahproduk.pug', {name:userName, avatar:avatar, product:productDetailData});

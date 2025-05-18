@@ -2,12 +2,12 @@
     border: 1.5px solid #006094;
 }
 
-#cart-icon:hover{
-    cursor: pointer;
+#nav-cart-icon:hover{
+    cursor: pointer!important;
 }
 
-#notification-icon:hover{
-    cursor:pointer; 
+#nav-notification-icon:hover{
+    cursor:pointer!important; 
 }
 
 #login-button:hover{
