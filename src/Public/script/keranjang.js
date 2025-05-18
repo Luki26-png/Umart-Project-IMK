@@ -1,3 +1,33 @@
+function countCartTotal(){
+    let cartTotal = 0;
+    //quantity array
+    const quantityArray = [];
+    //price array
+    const priceArray = [];
+
+    const allItemsQuantity = document.querySelectorAll(".item-quantity");
+    const allItemsPrice = document.querySelectorAll(".cart-item-price");
+
+    allItemsQuantity.forEach((quantity)=>{
+        quantityArray.push(parseInt(quantity.innerText, 10))
+    });
+
+    allItemsPrice.forEach((price)=>{
+        const formattedPrice = price.innerText.replace(/\D/g, '');
+        priceArray.push(parseInt(formattedPrice, 10));
+    });
+
+    if (quantityArray.length == priceArray.length) {
+        for (let index = 0; index < priceArray.length; index++) {
+            cartTotal += quantityArray[index] * priceArray[index];
+        }
+    }
+
+    cartTotal = cartTotal.toString();
+    cartTotal = cartTotal.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    document.getElementById('cart-total-price').innerText = `Rp ${cartTotal}`;    
+}
+
 function addQuantity(event){
     event.preventDefault();
     const quantityDisplayElement = event.target.previousElementSibling;
@@ -8,6 +38,7 @@ function addQuantity(event){
             quantityDisplayElement.innerText = currentQuantity;
         }
     }
+    countCartTotal();
 }
 
 function substractQuantity(event){
@@ -20,6 +51,7 @@ function substractQuantity(event){
             quantityDisplayElement.innerText = currentQuantity;
         }
     }
+    countCartTotal();
 }
 
 //di bawah ini fungsi untuk menghapus cart item
@@ -66,10 +98,19 @@ document.getElementById("confirmDeleteBtn").addEventListener("click", async func
         setTimeout(() => {
             alertBox.classList.add("d-none");
         }, 5000);
+
+
     } catch (error) {
         alert("Gagal menghapus item. Silakan coba lagi.");
     }
-
+    //check if cart is empty after cart items removal
+    const currentCartItems = document.querySelectorAll(".card");
+    if(currentCartItems.length == 0){
+        const heading4 = document.createElement("h4");
+        heading4.innerText = "Your cart is empty";
+        document.getElementById("keranjang-section").appendChild(heading4);
+        document.getElementById("cart-total-price").innerHTML= "Rp 0";
+    };    
     // Hide modal
     const modalElement = document.getElementById('confirmDeleteModal');
     const modalInstance = bootstrap.Modal.getInstance(modalElement);
