@@ -28,6 +28,48 @@ class CartController{
             console.error("Error adding product to cart \n", error);
         }
     }
+
+    public async deleteItemFromCart(req: Request, res:Response):Promise<void>{
+        if(!req.session.user_id){
+            res.status(HttpStatusCode.Unauthorized).json({message: "Unauthorized"});
+            return;
+        }
+        const deletedCartItemId : number = Number(req.body.cart_item_id);
+        try {
+            const cartItemModel = new CartItemModel(deletedCartItemId);
+            const deleteCartItemSuccess : boolean = await cartItemModel.deleteCartItem();
+            if(!deleteCartItemSuccess){
+                console.error(`Error deleting cart item with id ${deletedCartItemId}, from CartController.deleteItemFromCart`);
+                res.status(HttpStatusCode.NotModified).json({message:"not modified"});
+                return;
+            }
+            res.status(HttpStatusCode.OK).json({message:"ok"});
+        } catch (error) {
+            console.error(`Error deleting cart item from cart \n`, error);
+        }
+    }
+
+    public async showCart(req: Request, res: Response):Promise<void>{
+        if(!req.session.user_id){
+            res.status(HttpStatusCode.Unauthorized).send("<h3>You're not authorized to see this page</h3>");
+            return;
+        }
+        const cartId : number = <number>req.session.cart_id;
+        const userName : string = <string>req.session.username;
+        const avatar = req.session.avatar;
+        try {
+            const cartItemModel = new CartItemModel(cartId);
+            const cartItemData = await cartItemModel.getCartItem();
+            if (cartItemData == null) {
+                res.render('user/keranjang.pug',{name:userName, avatar:avatar, cartItems: null});
+                return;
+            }
+            //console.log(cartItemData);
+            res.render('user/keranjang.pug', {name:userName, avatar:avatar, cartItems: cartItemData});
+        } catch (error) {
+            throw new Error(`Error showing product cart, from CartController.showCart\n ${error}`);
+        }
+    }
 }
 
 export default CartController;

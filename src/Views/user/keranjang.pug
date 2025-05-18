@@ -28,30 +28,31 @@ html(lang="en")
     include ../navbar.pug
     main.container-fluid
       .row
-        .col-md-6.border.py-5.ps-5.pe-5.overflow-auto(style="height:905px;")
+        .col-lg-6.border.py-5.ps-5.pe-5.overflow-auto(style="height:905px;")
           h3.w-75.border-bottom.fw-bold.py-4.mb-5 Keranjangku
-          each i in [1, 2, 3, 4, 5]
-            .card.mb-3.border-0(style="max-width: 100%;")
-              .row.g-0
-                .col-sm-4
-                  img.img-fluid.rounded-start(style="width:300px;",src="https://imageplaceholder.net/600", alt="img")
-                .col-sm-8.border-bottom
-                  .card-body.h-100.d-flex.pt-0.flex-column.justify-content-between.keranjang-card-body
-                    div.d-flex.flex-wrap
-                      h5.card-title.fw-bold.text-wrap
-                        |Rengginang khas pulau penyengat, mix terasi udang
-                      span.delete-cart-item 
-                        |<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="red" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7h16m-10 4v6m4-6v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg>
-                    p.card-text.text-wrap.fs-6.py-2 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl in bibendum tincidunt, sapien metus dignissim
-                    .d-flex.flex-wrap.justify-content-between.align-items-center
-                      h6 Rp 36.000
-                        span.px-3 X
-                      .row.px-3
-                        .btn.col.border.py-2.rounded-1.text-center.py-1.px-3.number-operation(onclick='substractQuantity(event)') -
-                        .col.border.py-2.text-center.mx-2.rounded-1.py-1.px-3(style='width:55px;') 1
-                        .btn.col.border.py-2.rounded-1.text-center.py-1.px-3.number-operation(onclick='addQuantity(event)') +
+          if cartItems
+            each item in cartItems
+              .card.mb-3.border-0(style="max-width: 100%;")
+                .row.g-0
+                  .col-sm-4
+                    img.img-fluid.rounded-start(style="width:300px;",src=`public/product_img/${item.cover}`, alt="img")
+                  .col-sm-8.border-bottom
+                    .card-body.h-100.d-flex.pt-0.flex-column.justify-content-start.keranjang-card-body
+                      h5.card-title.fw-bold.text-wrap #{item.name}
+                      p.card-text.text-wrap.fs-6.py-2 #{item.summary}
+                      .d-flex.flex-wrap.justify-content-around.align-items-center
+                        span.delete-cart-item.border.border-danger.rounded-1.p-1.mb-2(data-bs-toggle="tooltip", title="Hapus dari Keranjang")
+                          |<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="red" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7h16m-10 4v6m4-6v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg>
+                        h6 Rp #{item.price}
+                          span.px-3 X
+                        .row.px-3
+                          .btn.col.border.py-2.rounded-1.text-center.py-1.px-3.number-operation(onclick='substractQuantity(event)') -
+                          .col.border.py-2.text-center.mx-2.rounded-1.py-1.px-3(style='width:55px;') 1
+                          .btn.col.border.py-2.rounded-1.text-center.py-1.px-3.number-operation(onclick='addQuantity(event)') +
+          else 
+            h4 your cart is empty
 
-        .col-md-6.border.py-5.ps-5.pe-5.background-biru-muda-50
+        .col-lg-6.border.py-5.ps-5.pe-5.background-biru-muda-50
           h3.w-75.border-bottom.fw-bold.py-4.mb-5 Data Pemesanan
           h5.mb-5.fw-bold Total :
             span.fw-bold Rp 1.600.000
@@ -74,3 +75,8 @@ html(lang="en")
     include ../footer.pug
     script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js")
     script(src="public/script/keranjang.js")
+    script. 
+      let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+          return new bootstrap.Tooltip(tooltipTriggerEl)
+        })

@@ -235,4 +235,47 @@ export class CartItemService{
         return false;
     }
   }
+
+  public async deleteFromCartItemTable(cartItemId:number):Promise<boolean>{
+    const sqlQuery = `delete from cart_items where id = ?`;
+    const values : number[] = [cartItemId];
+    try {
+      const pool = DatabaseService.getPool();
+      const [_rows, _fields] = await pool.query(sqlQuery, values);
+      console.log(`success deleting product with id = ${cartItemId}, from CartItemService.deleteFromCartItemTable`);
+      return true;
+    } catch (error) {
+      console.error(`Fail to delete product with id = ${cartItemId}, from CartItemService.deleteFromCartItemTable`);
+      return false;
+    }
+  }
+
+  public async retrieveCartItemTable(cartId: number):Promise<RowDataPacket[]>{
+    const sqlQuery = `
+    SELECT
+      CART_ITEMS.id,
+      CART_ITEMS.product_id,
+      PRODUCTS.name,
+      PRODUCTS.summary,
+      PRODUCTS.cover,
+      PRODUCTS.price,
+      CART_ITEMS.quantity
+    FROM
+      CART_ITEMS
+    INNER JOIN
+      PRODUCTS ON PRODUCTS.id = CART_ITEMS.product_id
+    WHERE
+      cart_id = ?;
+    `;
+    const values : number[] = [cartId];
+    try {
+      const pool = DatabaseService.getPool();
+      const [rows, _fields] = await pool.query<RowDataPacket[]>(sqlQuery, values);
+      console.log(`Success retrieving cart items with cart id = ${cartId}, CartItemService.retrieveCartItemTable`);
+      return rows;
+    } catch (error) {
+      console.error(`Error retrieving cart items with id = ${cartId}, CartItemService.retrieveCartItemTable`);
+      return [];
+    }
+  }
 }

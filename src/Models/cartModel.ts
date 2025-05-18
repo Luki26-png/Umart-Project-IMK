@@ -1,4 +1,6 @@
 import { CartService, CartItemService } from "../Config/db";
+import { RowDataPacket } from "mysql2";
+import cart from "../Routes/cart";
 
 export interface CartProps{
     id: number;
@@ -12,6 +14,9 @@ export interface CartItemProps{
     product_id: number;//the product of this cart item
     quantity: number;
 }
+
+type CartItemId = number;
+type CartId = number;
 
 export class CartModel{
     private props: CartProps;
@@ -44,22 +49,18 @@ export class CartModel{
 };
 
 export class CartItemModel{
-    private props: CartItemProps;
+    private props: CartItemProps|CartItemId|CartId;
     private cartItemService: CartItemService;
 
-    public constructor(props: CartItemProps){
-        this.validate(props);
+    public constructor(props: CartItemProps|CartItemId|CartId){
         this.props = props;
         this.cartItemService = new CartItemService();
     }
 
-    private validate(props: CartItemProps){
-        if (!props.id || !props.cart_id || !props.product_id) {
-            throw new Error("id, cart_id, and product_id are required");
-        }
-    }
-
     public async addCartItem():Promise<boolean>{
+        if (!this.isCartItemProps(this.props)) {
+            throw new Error("the data type must be CartItemProps, from CartItemModel.addCartItem");
+        }
         try {
             const alreadyInCart : boolean = await this.cartItemService.isItemInCart(this.props.cart_id, this.props.product_id);
             if(alreadyInCart){
@@ -77,5 +78,52 @@ export class CartItemModel{
             console.error("Error adding product to cart, from CartItemModel.addCartItem\n", error);
             return false;
         }
+    }
+
+    public async deleteCartItem():Promise<boolean>{
+        if (!this.isNumber(this.props)) {
+            throw new Error("The data type must be number to delete product, from CartItemModel.deleteCartItem");
+        }
+        try {
+            const deleteResultOk : boolean = await this.cartItemService.deleteFromCartItemTable(this.props);
+            if(!deleteResultOk){
+              return false;  
+            }
+            return true;
+        } catch (error) {
+            console.error(`Error deleting cart Item, from CartItemModel.deleteCartItem\n`, error);
+            return false;
+        }
+    }
+
+    public async getCartItem():Promise<RowDataPacket[]|null>{
+        if (!this.isNumber(this.props)) {
+            throw new Error("The data type must be number | cart_id to delete product, from CartItemModel.deleteCartItem");
+        }
+        try {
+            const cartItemData = await this.cartItemService.retrieveCartItemTable(this.props);
+            if(cartItemData.length == 0){
+                console.log(`Fail to retrieve cart items, cart with id = ${this.props} is empty, from CartItemModel.getCartItem`);
+                return null;
+            }
+            return cartItemData;
+        } catch (error) {
+            console.error(`Error retrieveing cart items data,  from CartItemModel.getCartItem\n`, error);
+            return null;
+        }
+    }
+
+    //create type guard
+    private isNumber(data:any):data is number{
+        return typeof data === "number";
+    }
+
+    private isCartItemProps(data:any):data is CartItemProps{
+        return(
+            typeof data.id === "number" &&
+            typeof data.cart_id === "number" &&
+            typeof data.product_id === "number" &&
+            typeof data.quantity === "number"
+        );
     }
 }

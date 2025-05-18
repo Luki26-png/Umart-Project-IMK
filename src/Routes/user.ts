@@ -2,6 +2,7 @@ import express from 'express';
 import multer from 'multer';
 import ProductController from '../Controllers/productController';
 import UserController from '../Controllers/userController';
+import CartController from '../Controllers/cartController';
 
 const storage = multer.diskStorage({
     destination: function (_req, _file, cb) {
@@ -19,14 +20,14 @@ user.use('/public',express.static(__dirname + '/../Public'));
 //initiate controller
 const productController = new ProductController();
 const userController = new UserController();
+const cartController = new CartController();
 
 user.get('/', (req, res)=>{
     res.send("<h1>this is user route</h1>")
 });
 
-user.get('/cart', (_req, res)=>{
-    res.render('user/keranjang.pug', {name:null, avatar:null});
-});
+user.get('/cart', cartController.showCart);
+
 user.get('/add-product',productController.showProductDetailPrice);
 user.get('/product-detail', productController.showProductDetail);
 user.get('/product-list',productController.showProductCardList);
