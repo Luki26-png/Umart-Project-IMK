@@ -2,10 +2,10 @@ import mysql, { Pool, PoolOptions, RowDataPacket } from 'mysql2/promise';
 import { ProductProps } from '../Models/productModel';
 import { AuthData, RegisterData } from '../Models/authModel';
 import { UserUpdateProps } from '../Models/userModel';
-import { CartProps, CartModel, CartItemProps } from '../Models/cartModel';
+import { CartProps, CartItemProps } from '../Models/cartModel';
+import { OrderDetailProps, OrderItemProps, PaymentDetailProps } from '../Models/orderModel';
 
 import dbAuth from './config';
-import cart from '../Routes/cart';
 
 export class DatabaseService {
   private static pool: Pool;
@@ -278,4 +278,58 @@ export class CartItemService{
       return [];
     }
   }
+}
+
+export class OrderDetailService{
+  public async insertIntoOrderDetailTable(props: OrderDetailProps):Promise<boolean>{
+    const sqlQuery = `INSERT INTO order_details (id, user_id, payment_id, total) VALUES (?,?,?,?);`;
+    const values : (number|string)[] = [props.id, props.user_id, props.payment_id, props.total];
+    try {
+      const pool = DatabaseService.getPool();
+      const [_result, _fields] = await pool.query(sqlQuery, values);
+      console.log("Success adding new order to order_details, from OrderDetailService.insertIntoOrderDetailTable");
+      return true;
+    } catch (error) {
+      console.error("Error adding new item to order_details, from OrderDetailService.insertIntoOrderDetailTable\n", error);
+      return false;
+    }
+  }
+
+  
+}
+
+export class OrderItemService{
+  public async insertIntoOrderItemTable(props: OrderItemProps):Promise<boolean>{
+    const sqlQuery = `INSERT INTO order_items (id, order_id, product_id, quantity, tenggat, status) VALUES (?,?,?,?,?,?);`;
+    const values = [props.id, props.order_id, props.product_id, props.quantity, props.tenggat, props.status];
+    try {
+      const pool = DatabaseService.getPool();
+      const [_result, _fields] = await pool.query(sqlQuery, values);
+      console.log("Success adding new order to order_items, from OrderItemService.insertIntoOrderItemTable");
+      return true;
+    } catch (error) {
+      console.error("Error adding new item to order_items, from OrdeItemService.insertIntoOrderItemTable\n", error);
+      return false;
+    }
+  }
+
+
+}
+
+export class PaymentDetailService{
+  public async insertIntoPaymentDetailTable(props:PaymentDetailProps):Promise<boolean>{
+    const sqlQuery = `INSERT INTO payment_details (id, order_id, amount, status) VALUES (?,?,?,?);`;
+    const values = [props.id, props.order_id, props.amount, props.status];
+    try {
+      const pool = DatabaseService.getPool();
+      const [_result, _fields] = await pool.query(sqlQuery, values);
+      console.log("Success adding new order to payment_details, from PaymentDetailService.insertIntoPaymentDetailTable");
+      return true;
+    } catch (error) {
+      console.error("Error adding new item to payment_details, fromPaymentDetailService.insertIntoPaymentDetailTable\n", error);
+      return false;
+    }
+  }
+
+
 }

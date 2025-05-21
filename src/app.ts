@@ -14,6 +14,7 @@ import user from './Routes/user';
 import product from './Routes/product';
 import homepage from './Routes/homepage';
 import cart from './Routes/cart';
+import order from './Routes/order';
 
 const app = express();
 const port : number = 8080;
@@ -25,6 +26,7 @@ app.use(session({
   saveUninitialized: true
   }
 ));
+
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.set('view engine', 'pug');
@@ -57,6 +59,7 @@ app.get('/logout', (req, res)=>{
 app.use('/user', user);
 app.use('/api', product);
 app.use('/api', cart);
+app.use('/api', order)
 app.use('/admin', admin);
 
 app.listen(port, () => {

@@ -1,0 +1,136 @@
+import { OrderDetailService, OrderItemService, PaymentDetailService } from "../Config/db";
+
+export enum PaymentStatus{
+    lunas = "lunas",
+    pending = "pending",
+}
+
+export enum OrderItemStatus{
+    selesai = "selesai",
+    gagal = "gagal",
+    dikirim = "dikirim",
+    diproses = "diproses",
+}
+
+export interface OrderDetailProps{
+    id : number;
+    user_id : number;
+    payment_id: number;
+    total : string;
+}
+
+export interface OrderItemProps{
+    id: number;
+    order_id: number;//Reference to OrderDetailProps.id
+    product_id: number;
+    quantity: number;
+    tenggat: string;
+    status: OrderItemStatus;
+}
+
+export interface PaymentDetailProps{
+    id: number;
+    order_id: number;//reference to OrderDetailProps.id
+    amount: string;
+    status: PaymentStatus;
+}
+
+export class OrderDetailModel{
+    private orderDetailService: OrderDetailService;
+    private props: OrderDetailProps|null;
+
+    public constructor(props: OrderDetailProps|null){
+        this.props = props;
+        this.orderDetailService = new OrderDetailService();
+    }
+
+    public async createOrder():Promise<boolean>{
+        if(!this.isOrderDetailProps(this.props)){
+            throw new Error("Invalid Props, it must be OrderDetailProps");
+        }
+        try {
+            const createOrderSuccess: boolean = await this.orderDetailService.insertIntoOrderDetailTable(this.props);
+            if(!createOrderSuccess){
+                throw new Error("Failed to create order");
+            }
+            console.log("success create new order from OrderDetailModel.createOrder");
+            return true;    
+        } catch (error) {
+            console.log(`error from OrderDetailModel.createOrder:\n ${error}`);
+            return false;
+        }
+    }
+
+    private isOrderDetailProps(data:any):data is OrderDetailProps{
+        return(
+            typeof data.id === "number" &&
+            typeof data.user_id === "number" &&
+            typeof data.payment_id === "number" &&
+            typeof data.total === "string"
+        );
+    }
+
+    private isNull(data:any): data is null{
+        return data == null;
+    }
+}
+
+export class OrderItemModel{
+    private orderItemService: OrderItemService;
+
+    public constructor(){
+        this.orderItemService = new OrderItemService();
+    }
+
+    public async addOrderItem(props:OrderItemProps){
+        try {
+            const addOrderItemSuccess: boolean = await this.orderItemService.insertIntoOrderItemTable(props);
+            if(!addOrderItemSuccess){
+                throw new Error("Failed to add order item");
+            }
+            console.log("success add new order item from OrderItemModel.addOrderItem");
+        } catch (error) {
+            throw new Error(`error from OrderItemModel.addOrderItem:\n\n ${error}`);
+        }
+    }
+}
+
+export class PaymentDetailModel{
+    private paymentDetailService: PaymentDetailService;
+    private props: PaymentDetailProps|null;
+
+    public constructor(props: PaymentDetailProps|null){
+        this.props = props;
+        this.paymentDetailService = new PaymentDetailService();
+    }
+
+    public async createPayment():Promise<boolean>{
+        if(!this.isPaymentDetailProps(this.props)){
+            throw new Error("Invalid Props, it must be PaymentDetailProps");
+        }
+        try {
+            const createPaymentSuccess: boolean = await this.paymentDetailService.insertIntoPaymentDetailTable(this.props);
+            if(!createPaymentSuccess){
+                throw new Error("Failed to create payment, the data type must be PaymentDetailProps");
+            }
+            console.log("success create new payment from PaymentDetailModel.createPayment");
+            return true;    
+        } catch (error) {
+            console.log(`error from PaymentDetailModel.createPayment:\n ${error}`);
+            return false;
+        }
+    }
+
+    private isPaymentDetailProps(data:any):data is PaymentDetailProps{
+        return(
+            typeof data.id === "number" &&
+            typeof data.order_id === "number" &&
+            typeof data.amount === "string" &&
+            typeof data.status === "string"
+        );
+    }
+
+    private isNull(data:any): data is null{
+        return data == null;
+    }
+}

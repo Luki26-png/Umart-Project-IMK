@@ -57,6 +57,12 @@ class CartController{
         const cartId : number = <number>req.session.cart_id;
         const userName : string = <string>req.session.username;
         const avatar = req.session.avatar;
+        const userData = {
+            name: req.session.name,
+            email: req.session.email,
+            address: req.session.address,
+            phone_number : req.session.phone_number
+        }
         try {
             const cartItemModel = new CartItemModel(cartId);
             const cartItemData = await cartItemModel.getCartItem();
@@ -65,7 +71,13 @@ class CartController{
                 return;
             }
             //console.log(cartItemData);
-            res.render('user/keranjang.pug', {name:userName, avatar:avatar, cartItems: cartItemData.productData, cartTotal: cartItemData.cartTotal});
+            res.render('user/keranjang.pug', {
+                name:userName, 
+                avatar:avatar, 
+                cartItems: cartItemData.productData, 
+                cartTotal: cartItemData.cartTotal,
+                user: userData
+            });
         } catch (error) {
             throw new Error(`Error showing product cart, from CartController.showCart\n ${error}`);
         }

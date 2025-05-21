@@ -38,8 +38,10 @@ class Product{
     //add new product
     public async addNewProduct():Promise<string>{
         try {
-          await this.productService.insertToProductTable(this.props);
-          return "success adding new product";  
+            //remove any non digit character just in case
+            this.props.price = this.props.price.replace(/\D/g, '');
+            await this.productService.insertToProductTable(this.props);
+            return "success adding new product";  
         } catch (error) {
             throw new Error("Failed to add new product ");
         }

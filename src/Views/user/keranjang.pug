@@ -60,7 +60,7 @@ html(lang="en")
                           span.px-3 X
                         .row.px-3
                           .btn.col.border.py-2.rounded-1.text-center.py-1.px-3.number-operation(onclick='substractQuantity(event)') -
-                          .col.border.py-2.text-center.mx-2.rounded-1.py-1.px-3.item-quantity(style='width:55px;') #{item.quantity}
+                          .col.border.py-2.text-center.mx-2.rounded-1.py-1.px-3.item-quantity(style='width:55px;', id = item.product_id) #{item.quantity}
                           .btn.col.border.py-2.rounded-1.text-center.py-1.px-3.number-operation(onclick='addQuantity(event)') +
           else 
             h4 your cart is empty
@@ -75,17 +75,23 @@ html(lang="en")
           form
             .mb-3
               label.form-label.fw-medium(for="name") Nama
-              input#name.form-control(type="text", placeholder="your name")
+              input#name.form-control(type="text", placeholder="Masukkan Nama Anda", value= user.name)
             .mb-3
               label.form-label.fw-medium(for="email") Email
-              input#email.form-control(type="email", placeholder="name@example.com")
+              input#email.form-control(type="email", placeholder="Masukkan Email Anda", value= user.email)
             .mb-3
               label.form-label.fw-medium(for="alamat") Alamat
-              input#alamat.form-control(type="text", placeholder="Jalan Pramuka")
+              if user.address
+                input#alamat.form-control(type="text", placeholder="Jalan Pramuka", value= user.address)
+              else 
+                input#alamat.form-control(type="text", placeholder="Masukkan Alamat Anda")
             .mb-3
               label.form-label.fw-medium(for="no-hp") No Hp
-              input#no-hp.form-control(type="text", placeholder="0812039182")
-            button.btn.btn-primary.background-biru-laut.text-white.w-100.mt-5.mb-3 Checkout
+              if user.phone_number
+                input#no-hp.form-control(type="text", placeholder="Masukkan Nomor Telepon Anda", value=user.phone_number)
+              else 
+                input#no-hp.form-control(type="text", placeholder="Masukkan Nomor Telepon Anda")
+            button.btn.btn-primary.background-biru-laut.text-white.w-100.mt-5.mb-3#checkout-button Checkout
             p.text-wrap
               small Data pribadi Anda akan digunakan untuk memproses pesanan Anda, mendukung pengalaman Anda di seluruh situs web ini, dan untuk tujuan lain yang dijelaskan dalam kebijakan privasi kami. Garansi uang kembali 30 hari.
     

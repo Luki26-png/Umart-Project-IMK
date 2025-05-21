@@ -110,9 +110,77 @@ document.getElementById("confirmDeleteBtn").addEventListener("click", async func
         heading4.innerText = "Your cart is empty";
         document.getElementById("keranjang-section").appendChild(heading4);
         document.getElementById("cart-total-price").innerHTML= "Rp 0";
-    };    
+    }else{
+        countCartTotal();
+    }
     // Hide modal
     const modalElement = document.getElementById('confirmDeleteModal');
     const modalInstance = bootstrap.Modal.getInstance(modalElement);
     modalInstance.hide();
+});
+
+//function to create a date two weeks from now
+function getDateTwoWeeksLater() {
+  const currentDate = new Date();
+  const twoWeeksInMillis = 14 * 24 * 60 * 60 * 1000; // 14 days * 24 hours/day * 60 mins/hour * 60 secs/min * 1000 ms/sec
+  const futureDate = new Date(currentDate.getTime() + twoWeeksInMillis);
+
+  // You can format the date as needed (e.g., YYYY-MM-DD)
+  const year = futureDate.getFullYear();
+  const month = String(futureDate.getMonth() + 1).padStart(2, '0'); // Month is 0-indexed
+  const day = String(futureDate.getDate()).padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
+}
+
+
+document.getElementById('checkout-button').addEventListener('click', (event)=>{
+    event.preventDefault();
+    const cartTotalPrice = document.getElementById('cart-total-price').innerHTML;
+    const cartItem = [];
+    const address = document.getElementById('alamat').value.trim();
+    if (!address || null || "") {
+        window.alert("Alamat tidak boleh kosong");
+        return;
+    }
+
+    const allCartItem = document.querySelectorAll('.item-quantity');
+    allCartItem.forEach((item)=>{
+        let itemQuantity = item.innerHTML;
+        itemQuantity = parseInt(itemQuantity, 10);
+        if (itemQuantity !== 0) {
+            const currentItem = {
+                productId : parseInt(item.id, 10),
+                productQuantity : parseInt(item.innerHTML, 10),
+                tenggat : getDateTwoWeeksLater()
+            }
+            cartItem.push(currentItem);
+        }
+    });
+
+    const orderDetail = JSON.stringify({
+        total : cartTotalPrice,
+        address : address,
+        orderItems :cartItem,
+    });
+
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "/api/order", true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+
+    xhr.onload = ()=>{
+        if(xhr.status >= 200 && xhr.status < 300){
+            window.alert("berhasil membuat order");
+        }else{
+            window.alert("Gagal membuat order");
+        }
+    }
+
+    xhr.onerror = function () {
+        // Handle network errors (e.g., connection refused, DNS error)
+        //console.error("Network error occurred while trying to add product to cart.");
+        window.alert("Terjadi kesalahan jaringan. Silakan periksa koneksi Anda dan coba lagi.");
+    };
+
+    xhr.send(orderDetail);
 });
