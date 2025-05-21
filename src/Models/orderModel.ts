@@ -1,4 +1,6 @@
+import { RowDataPacket } from "mysql2";
 import { OrderDetailService, OrderItemService, PaymentDetailService } from "../Config/db";
+import order from "../Routes/order";
 
 export enum PaymentStatus{
     lunas = "lunas",
@@ -10,6 +12,7 @@ export enum OrderItemStatus{
     gagal = "gagal",
     dikirim = "dikirim",
     diproses = "diproses",
+    menunggu = "Menunggu Pembayaran"
 }
 
 export interface OrderDetailProps{
@@ -58,6 +61,20 @@ export class OrderDetailModel{
         } catch (error) {
             console.log(`error from OrderDetailModel.createOrder:\n ${error}`);
             return false;
+        }
+    }
+
+    public async getOrder(userId: number):Promise<RowDataPacket[]|null>{
+        try{
+            const orderData = await this.orderDetailService.retrieveOrderDetailJoinOrderItem(userId);
+            if (orderData.length == 0) {
+                console.log(`Fail to retrieve order data, user with id ${userId} have no order, from OrderDetailModel.getorder`);
+                return null;
+            }
+            console.log(`success retrieving order data with userId ${userId}, from OrderDetailModel.getorder`)
+            return orderData;    
+        }catch(error){
+            throw new Error(`Error retrieving order data with userId ${userId}\n\n ${error}, from OrderDetailModel.getorder`);
         }
     }
 

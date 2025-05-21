@@ -3,6 +3,7 @@ import multer from 'multer';
 import ProductController from '../Controllers/productController';
 import UserController from '../Controllers/userController';
 import CartController from '../Controllers/cartController';
+import OrderController from '../Controllers/orderController';
 
 const storage = multer.diskStorage({
     destination: function (_req, _file, cb) {
@@ -21,10 +22,13 @@ user.use('/public',express.static(__dirname + '/../Public'));
 const productController = new ProductController();
 const userController = new UserController();
 const cartController = new CartController();
+const orderController = new OrderController();
 
 user.get('/', (req, res)=>{
     res.send("<h1>this is user route</h1>")
 });
+
+user.get('/pesanan',orderController.showOrder);
 
 user.get('/cart', cartController.showCart);
 

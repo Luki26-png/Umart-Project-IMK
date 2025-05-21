@@ -295,7 +295,41 @@ export class OrderDetailService{
     }
   }
 
-  
+  public async retrieveOrderDetailJoinOrderItem(userId:number):Promise<RowDataPacket[]>{
+    const sqlQuery = `
+      select
+        (od.id) as order_details_id, -- alias for clarity
+        (od.user_id),
+        (od.total) as order_total, -- alias for clarity
+        (oi.id) as order_item_id,   -- alias for clarity
+        (oi.product_id),
+        (p.name) as product_name, -- added products.name here
+        (oi.quantity),
+        (oi.tenggat),
+        (oi.status) as order_item_status, -- alias for clarity
+        (pd.id) as payment_detail_id  -- alias for clarity
+      from
+        order_details as od
+      inner join
+        order_items as oi on od.id = oi.order_id
+      inner join
+        payment_details as pd on od.id = pd.order_id
+      inner join
+        products as p on oi.product_id = p.id -- joined products table
+      where
+        od.user_id = ?;
+    `;
+    const values: number[] = [userId];
+    try {
+      const pool = DatabaseService.getPool();
+      const [rows, _fields] = await pool.query<RowDataPacket[]>(sqlQuery, values);
+      console.log(`Success retrieving order with user id = ${userId}, OrderDetailService.retrieveOrderDetailJoinOrderItem`);
+      return rows;
+    } catch (error) {
+      console.log(`Error retrieving order with user id = ${userId}, OrderDetailService.retrieveOrderDetailJoinOrderItem\n${error}`);
+      return[];
+    }
+  }
 }
 
 export class OrderItemService{

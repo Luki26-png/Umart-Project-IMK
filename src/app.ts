@@ -59,7 +59,7 @@ app.get('/logout', (req, res)=>{
 app.use('/user', user);
 app.use('/api', product);
 app.use('/api', cart);
-app.use('/api', order)
+app.use('/api', order);
 app.use('/admin', admin);
 
 app.listen(port, () => {

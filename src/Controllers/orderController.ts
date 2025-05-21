@@ -23,7 +23,7 @@ class OrderController{
                 product_id: item.productId,
                 quantity: item.productQuantity,
                 tenggat: item.tenggat,
-                status: OrderItemStatus.diproses
+                status: OrderItemStatus.menunggu
             }
             orderItems.push(currentItem);
         })
@@ -53,6 +53,28 @@ class OrderController{
             res.status(200).json({message:"ok"});
         } catch (error) {
             throw new Error("Error from OrderController.createOrder");
+        }
+    }
+
+    public async showOrder(req: Request, res: Response):Promise<void>{
+        if (!req.session.user_id) {
+            res.send("<h1>Unauthorized</h1>")
+            return;
+        }
+        const user_id:number = <number>req.session.user_id;
+        const userName = req.session.username;
+        const avatar = req.session.avatar;
+        try {
+            const orderDetailModel = new OrderDetailModel(null);
+            const orderData = await orderDetailModel.getOrder(user_id)
+            if (orderData == null) {
+                res.render('user/pesanan.pug', {name:userName, avatar:avatar, order: null})
+                return;
+            }
+            res.render('user/pesanan.pug', {name:userName, avatar:avatar, order: orderData});
+        } catch (error) {
+            throw new Error(`Error showing an order from OrderController.showOrder\n\n${error}`);
+            
         }
     }
 }
