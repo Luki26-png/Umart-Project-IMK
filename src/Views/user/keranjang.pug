@@ -51,7 +51,7 @@ html(lang="en")
                     img.img-fluid.rounded-start(style="width:300px;",src=`public/product_img/${item.cover}`, alt="img")
                   .col-sm-8.border-bottom
                     .card-body.h-100.d-flex.pt-0.flex-column.justify-content-start.keranjang-card-body
-                      h5.card-title.fw-bold.text-wrap #{item.name}
+                      h5.card-title.fw-bold.text-wrap.cart-item-name #{item.name}
                       p.card-text.text-wrap.fs-6.py-2 #{item.summary}
                       .d-flex.flex-wrap.justify-content-around.align-items-center
                         span.delete-cart-item.border.border-danger.rounded-1.p-1.mb-2(data-bs-toggle="tooltip", title="Hapus dari Keranjang")
@@ -107,6 +107,25 @@ html(lang="en")
             button.btn.btn-secondary(type='button', data-bs-dismiss='modal') Batal
             button#confirmDeleteBtn.btn.btn-danger(type='button') Hapus
     
+    #confirmCheckoutModal.modal.fade(tabindex='-1', aria-labelledby='confirmCheckoutModalLabel', aria-hidden='true')
+      .modal-dialog.modal-lg
+        .modal-content
+          .modal-header
+            h5#confirmCheckoutModalLabel.modal-title Konfirmasi Checkout
+            button.btn-close(type='button', data-bs-dismiss='modal', aria-label='Tutup')
+          .modal-body#modal-body-checkout
+            h5.py-4 Apakah Anda yakin ingin membeli item berikut?
+            table.table.table-bordered.table-striped
+              thead.table-primary
+                tr
+                  th Product Name
+                  th Harga Satuan
+                  th Kuantitas
+              tbody#checkout-confirm-table-body
+            h6.fw-bold.py-4#confirm-total
+          .modal-footer
+            button.btn.btn-secondary(type='button', data-bs-dismiss='modal') Batal
+            button#confirmCheckoutBtn.btn.btn-primary(type='button') Lanjut Checkout
     include ../footer.pug
     script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js")
     script(src="public/script/keranjang.js")

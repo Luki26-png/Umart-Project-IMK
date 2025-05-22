@@ -130,11 +130,62 @@ function getDateTwoWeeksLater() {
   const month = String(futureDate.getMonth() + 1).padStart(2, '0'); // Month is 0-indexed
   const day = String(futureDate.getDate()).padStart(2, '0');
 
-  return `${year}-${month}-${day}`;
+  return `${day}-${month}-${year}`;
 }
 
+function createTableRow(name, price, quantity){
+    // Create a table row
+    const row = document.createElement('tr');
 
+    // Create and append the first cell
+    const nameCell = document.createElement('td');
+    nameCell.textContent = name;
+    row.appendChild(nameCell);
+
+    // Create and append the second cell
+    const priceCell = document.createElement('td');
+    priceCell.textContent = price;
+    row.appendChild(priceCell);
+
+    // Create and append the third cell
+    const quantityCell = document.createElement('td');
+    quantityCell.textContent = quantity;
+    row.appendChild(quantityCell);
+
+    // Append the row to an existing table body
+    const tableBody = document.querySelector('#checkout-confirm-table-body');
+    tableBody.appendChild(row);
+}
+
+//function to remove table body child after the confirmation modal was closed
+document.getElementById('confirmCheckoutModal').addEventListener('hide.bs.modal', function () {
+    const checkoutTableConfirmation = document.querySelector('#checkout-confirm-table-body');
+    checkoutTableConfirmation.replaceChildren();
+});
+
+//function to show the confirmation modal after user click checkout button 
 document.getElementById('checkout-button').addEventListener('click', (event)=>{
+    event.preventDefault();
+
+    const itemCard = document.querySelectorAll('.card');
+    itemCard.forEach((item)=>{
+        const quantity = parseInt(item.querySelector('.item-quantity').innerHTML, 10);
+        if (quantity == 0) {
+            return;   
+        }
+        let name = item.querySelector('.cart-item-name').innerHTML;
+        let price = item.querySelector('.cart-item-price').innerText;
+        price = price.slice(0, price.length - 1);
+        createTableRow(name, price, quantity);
+    });
+    const cartTotalPrice = document.getElementById('cart-total-price').innerHTML;
+    document.getElementById('confirm-total').innerHTML = `Total : ${cartTotalPrice}`;
+    const modal = new bootstrap.Modal(document.getElementById('confirmCheckoutModal'));
+    modal.show();
+});
+
+//function to send checkout data to the server after confirmation
+document.getElementById('confirmCheckoutBtn').addEventListener('click',(event)=>{
     event.preventDefault();
     const cartTotalPrice = document.getElementById('cart-total-price').innerHTML;
     const cartItem = [];
@@ -170,7 +221,7 @@ document.getElementById('checkout-button').addEventListener('click', (event)=>{
 
     xhr.onload = ()=>{
         if(xhr.status >= 200 && xhr.status < 300){
-            window.alert("berhasil membuat order");
+            window.location.assign("http://"+ window.location.host + "/user/checkout");
         }else{
             window.alert("Gagal membuat order");
         }
@@ -182,5 +233,5 @@ document.getElementById('checkout-button').addEventListener('click', (event)=>{
         window.alert("Terjadi kesalahan jaringan. Silakan periksa koneksi Anda dan coba lagi.");
     };
 
-    xhr.send(orderDetail);
+    xhr.send(orderDetail);    
 });
