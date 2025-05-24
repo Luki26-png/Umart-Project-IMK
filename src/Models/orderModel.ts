@@ -138,15 +138,27 @@ export class PaymentDetailModel{
     }
 
     public async getPaymentDetailsByUserId(userId:number):Promise<RowDataPacket[]|null>{
+        const orderDetailService = new OrderDetailService();
+        const orderItemService = new OrderItemService();
         try {
-            const paymentList = await this.paymentDetailService.retrieveByUserId(userId);
+            let paymentList = await this.paymentDetailService.retrieveByUserId(userId);
             if(paymentList.length == 0){
                 console.log(`Error retrieving payment detail for userId = ${userId}. You're payment details is empty. from PaymentDetailModel.getPaymentDetailsByUserId`);
                 return null;
             }
+            //delete order if they've passed the 24 hour limit
+            paymentList.forEach(async (payment)=>{
+                if (payment.second_passed > 86400 && payment.status == "pending"){
+                    const _successDeleteItem = await orderItemService.deleteByOrderId(payment.order_id);
+                    const _successDeletePayment = await this.paymentDetailService.deleteByOrderId(payment.order_id);
+                    const _successDeleteOrderDetail = await orderDetailService.deleteById(payment.order_id);
+                }
+            });
+
+            paymentList = paymentList.filter(payment => payment.second_passed < 86400);
             return paymentList;
         } catch (error) {
-            console.log(`Error retrieving list of payment details for user_id = ${userId}. From PaymentDetailModel.getPaymentDetailsByUserId`);
+            console.log(`Error retrieving list of payment details for user_id = ${userId}. From PaymentDetailModel.getPaymentDetailsByUserId${error}`);
             return null;
         }
     }

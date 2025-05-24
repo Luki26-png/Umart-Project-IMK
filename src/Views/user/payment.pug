@@ -18,7 +18,7 @@ html(lang='en')
       .w-75.d-flex.flex-column.flex-wrap.align-items-center.justify-content-center.border-bottom.border-1.border-dark.pb-4
         p.text-center.fw-bold
           | Pay within 
-          span.timer 24:00:00
+          span.timer(id=second_passed) 24:00:00
         .qr-container.background-biru-laut.d-flex.flex-column.flex-wrap.justify-content-center.align-items-center.py-3.rounded-4.w-100(id=link)
           h3.py-4.fw-bold QRIS
           .qr-code
@@ -47,7 +47,12 @@ html(lang='en')
         window.location.assign("http://" + window.location.host + "/user/payment-list");
       });
 
-      let totalSeconds = 86400; // 1 hour = 3600 seconds
+      document.getElementById('check-status-button').addEventListener('click', (event)=>{
+        event.preventDefault();
+        window.location.assign("http://" + window.location.host + "/user/payment-list");
+      });
+      let secondHadPassed = parseInt(document.querySelector('.timer').id, 10);
+      let totalSeconds = 86400 - secondHadPassed; // 1 hour = 3600 seconds
       let countdown;
 
       const timerElement = document.querySelectorAll('.timer');

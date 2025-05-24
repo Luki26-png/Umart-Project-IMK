@@ -223,7 +223,7 @@ document.getElementById('confirmCheckoutBtn').addEventListener('click',(event)=>
         if(xhr.status >= 200 && xhr.status < 300){
             let response = xhr.responseText;
             response = JSON.parse(response);
-            window.location.assign("http://"+ window.location.host + `/user/payment?orderId=${response.orderId}&amount=${response.amount}`);
+            window.location.assign("http://"+ window.location.host + `/user/payment?orderId=${response.orderId}&amount=${response.amount}&second_passed=86400`);
         }else{
             window.alert("Gagal membuat order");
         }

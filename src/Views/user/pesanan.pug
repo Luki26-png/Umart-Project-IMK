@@ -58,11 +58,11 @@ html(lang="en")
     main.container-fluid
       .order-container
         #order-summary.p-5.d-flex.flex-wrap.justify-content-center
-          each item in [{icon: 'stash--inbox', count: 0, label: 'Dikemas'},{icon: 'bitcoin-icons--graph-filled', count: 0, label: 'Dikirim'},{icon: 'lsicon--order-done-filled', count: 0, label: 'Selesai'}]
+          each item in [{icon: 'stash--inbox', count: 0, label: 'Diproses', id: 'diproses'},{icon: 'bitcoin-icons--graph-filled', count: 0, label: 'Dikirim', id:"dikirim"},{icon: 'lsicon--order-done-filled', count: 0, label: 'Selesai', id: 'selesai'}]
             .background-biru-laut.mx-5.my-2.d-flex.flex-wrap.justify-content-center.py-3.px-5.rounded-2
               span(class=item.icon)
               .d-flex.flex-column.text-white.ms-4
-                span.fs-2.fw-bold= item.count
+                span.fs-2.fw-bold(id=item.id)= item.count
                 p.fw-bold= item.label
 
         #order-items.p-5.d-flex.justify-content-center
@@ -79,7 +79,11 @@ html(lang="en")
                     th.py-3 #{orderItem.tenggat}
                     th.py-3 #{orderItem.product_name}
                     th.py-3
-                      span.bg-success.rounded-1.py-1.px-3.text-white #{orderItem.order_item_status}
+                      case orderItem.order_item_status
+                        when "Menunggu Pembayaran"
+                          span.bg-warning.rounded-1.py-1.px-3.text-white.item-status #{orderItem.order_item_status}
+                        when "diproses"
+                          span.bg-success.rounded-1.py-1.px-3.text-white.item-status #{orderItem.order_item_status}
               else
                 tr 
                   th(colspan= 3) You have no order
@@ -92,3 +96,31 @@ html(lang="en")
             navMenu.className = 'd-flex flex-wrap align-content-center border-bottom border-2 border-primary';
             navMenu.childNodes[0].style.fontWeight = "bold";
         }
+
+        const summaryDiproses = document.getElementById('diproses');
+        const summaryDikirim = document.getElementById('dikirim');
+        const summarySelesai = document.getElementById('selesai');
+
+        let diproses = 0;
+        let dikirim = 0;
+        let selesai = 0;
+        const allItemStatus = document.querySelectorAll('.item-status');
+        allItemStatus.forEach((item)=>{
+          switch(item.innerText){
+            case "diproses": 
+              diproses += 1;
+              break;
+            case "dikirim":
+              dikirim += 1;
+              break;
+            case "selesai":
+              selesai += 1;
+              break;
+          }
+        });
+        summaryDiproses.innerHTML = `${diproses}`;
+        summaryDikirim.innerHTML = `${dikirim}`;
+        summarySelesai.innerHTML = `${selesai}`;
+
+
+

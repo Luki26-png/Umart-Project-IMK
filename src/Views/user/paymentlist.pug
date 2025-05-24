@@ -34,11 +34,14 @@ html(lang="en")
                     th.py-3 
                       h6 #{payment.payment_id}
                     th.py-3 
-                      h6 #{payment.amount}
+                      h6(id = payment.second_passed) #{payment.amount}
                     th.py-3 
                       h6 #{payment.status}
                     th.py-3
-                      button.btn.btn-primary.pay-button(id = payment.order_id, onclick='openPaymentPage(event)') bayar
+                      if payment.status == "pending"
+                        button.btn.btn-primary.pay-button(id = payment.order_id, onclick='openPaymentPage(event)') bayar
+                      else 
+                        h6 None
               else
                 tr 
                   th(colspan= 4) You have no order

@@ -309,6 +309,20 @@ export class OrderDetailService{
     }
   }
 
+  public async deleteById(id:number):Promise<boolean>{
+    const sqlQuery = `delete from order_details where id = ?`;
+    const values : number[] = [id];
+    try {
+      const pool = DatabaseService.getPool();
+      const [_rows, _fields] = await pool.query(sqlQuery, values);
+      console.log(`success deleting order order_details with id = ${id}, from OrderDetailService.deleteById`);
+      return true;
+    } catch (error) {
+      console.error(`Fail to delete order order_details with id = ${id}, from OrderDetailService.deleteById\n${error}`);
+      return false;
+    }
+  }
+
   public async retrieveOrderDetailJoinOrderItem(userId:number):Promise<RowDataPacket[]>{
     const sqlQuery = `
       select
@@ -361,6 +375,20 @@ export class OrderItemService{
     }
   }
 
+  public async deleteByOrderId(order_id:number):Promise<boolean>{
+    const sqlQuery = `delete from order_items where order_id = ?`;
+    const values : number[] = [order_id];
+    try {
+      const pool = DatabaseService.getPool();
+      const [_rows, _fields] = await pool.query(sqlQuery, values);
+      console.log(`success deleting order items with order_id = ${order_id}, from OrderItemService.deleteByOrderId`);
+      return true;
+    } catch (error) {
+      console.error(`Fail to delete order items with order_id = ${order_id}, from OrderItemService.deleteByOrderId\n${error}`);
+      return false;
+    }
+  }
+
 
 }
 
@@ -387,7 +415,7 @@ export class PaymentDetailService{
       pd.id as payment_id,
       pd.amount,
       pd.status,
-      pd.created_at
+      TIMESTAMPDIFF(SECOND, pd.created_at, NOW()) AS second_passed
     from order_details as od
     inner join 
       payment_details as pd on od.id = pd.order_id
@@ -401,8 +429,22 @@ export class PaymentDetailService{
       console.log(`Success retrieve payment detail with user_id ${userId}`);
       return rows;
     } catch (error) {
-      console.log(`Error retrieving payment details with user_id ${userId}, from PaymentDetailService.retrieveByUserId`)
+      console.log(`Error retrieving payment details with user_id ${userId}, from PaymentDetailService.retrieveByUserId\n${error}`)
       return []
+    }
+  }
+
+  public async deleteByOrderId(order_id:number){
+    const sqlQuery = `delete from payment_details where order_id = ?`;
+    const values : number[] = [order_id];
+    try {
+      const pool = DatabaseService.getPool();
+      const [_rows, _fields] = await pool.query(sqlQuery, values);
+      console.log(`success deleting order payment_details with order_id = ${order_id}, from PaymentDetailService.deleteByOrderId`);
+      return true;
+    } catch (error) {
+      console.error(`Fail to delete order payment_details with order_id = ${order_id}, from PaymentDetailService.deleteByOrderId\n${error}`);
+      return false;
     }
   }
 }
