@@ -1,6 +1,5 @@
 import { RowDataPacket } from "mysql2";
 import { OrderDetailService, OrderItemService, PaymentDetailService } from "../Config/db";
-import order from "../Routes/order";
 
 export enum PaymentStatus{
     lunas = "lunas",
@@ -135,6 +134,20 @@ export class PaymentDetailModel{
         } catch (error) {
             console.log(`error from PaymentDetailModel.createPayment:\n ${error}`);
             return false;
+        }
+    }
+
+    public async getPaymentDetailsByUserId(userId:number):Promise<RowDataPacket[]|null>{
+        try {
+            const paymentList = await this.paymentDetailService.retrieveByUserId(userId);
+            if(paymentList.length == 0){
+                console.log(`Error retrieving payment detail for userId = ${userId}. You're payment details is empty. from PaymentDetailModel.getPaymentDetailsByUserId`);
+                return null;
+            }
+            return paymentList;
+        } catch (error) {
+            console.log(`Error retrieving list of payment details for user_id = ${userId}. From PaymentDetailModel.getPaymentDetailsByUserId`);
+            return null;
         }
     }
 

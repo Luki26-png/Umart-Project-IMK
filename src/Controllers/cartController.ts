@@ -67,10 +67,16 @@ class CartController{
             const cartItemModel = new CartItemModel(cartId);
             const cartItemData = await cartItemModel.getCartItem();
             if (cartItemData == null) {
-                res.render('user/keranjang.pug',{name:userName, avatar:avatar, cartItems: null});
+                res.render('user/keranjang.pug',{
+                    name:userName,
+                    avatar:avatar,
+                    cartItems: null,
+                    cartTotal: null,
+                    user: userData 
+                });
                 return;
             }
-            //console.log(cartItemData);
+            
             res.render('user/keranjang.pug', {
                 name:userName, 
                 avatar:avatar, 

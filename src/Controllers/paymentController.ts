@@ -1,0 +1,44 @@
+import { Request, Response } from "express";
+import { PaymentDetailModel } from "../Models/orderModel";
+class PaymentController{
+    public async showPaymentList(req:Request, res:Response):Promise<void>{
+        if (!req.session.user_id) {
+            res.send("<h1>Unauthorized</h1>");
+            return;
+        }
+
+        try {
+            const userId = req.session.user_id;
+            const userName = req.session.username;
+            const avatar = req.session.avatar;
+            const paymentDetailModel = new PaymentDetailModel(null);
+            const paymentList = await paymentDetailModel.getPaymentDetailsByUserId(userId);
+            if (paymentList == null) {
+                res.render('user/paymentlist.pug', {name:userName, avatar:avatar, paymentList:null})
+                return;
+            }
+            res.render('user/paymentlist.pug', {name:userName, avatar:avatar, paymentList:paymentList});
+        }catch(error){
+            throw new Error("Error showing payment list from PaymentController.showPaymentList");
+        }
+    }
+
+    public async showPaymentPage(req:Request, res:Response):Promise<void>{
+        if (!req.query.orderId || !req.query.amount) {
+            res.send("<h1>Lack of Information</h1>");
+            return;
+        }
+        const orderId = req.query.orderId;
+        let amount = <string>req.query.amount;
+        if(amount){
+            amount = amount.replace(/\D/g, '');
+        }
+
+        res.render('user/payment.pug', 
+            {link:`https://umart-910a5.web.app?id=${orderId}&nominal=${amount}`, 
+            total: req.query.amount,
+            orderId: orderId}
+        );
+    }
+}
+export default PaymentController;

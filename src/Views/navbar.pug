@@ -17,7 +17,10 @@ nav.container-fluid.border.px-0
     #navbar-icon.d-sm-flex.flex-sm-wrap.justify-content-between.align-content-center
       .d-flex.justify-content-between.align-content-center
         img#nav-cart-icon.d-block(width="30", height="30", src="public/icons/cart-60.png", alt="shopping-cart",  data-bs-toggle="tooltip", title="Lihat Keranjang")
-        img#nav-notification-icon.d-block.mx-4(width="30", height="30", src="public/icons/notification-48.png", alt="notification",  data-bs-toggle="tooltip", title="notifikasi")
+        img#nav-notification-icon.d-block.mx-4.dropdown-toggle(width="30", height="30", src="public/icons/notification-48.png", data-bs-toggle="dropdown", aria-expanded="false")
+        ul.dropdown-menu.p-3(aria-labelledby="nav-notification")
+          li
+            small Tidak ada notifikasi
       if name
         .d-flex.justify-content-start.align-content-center
           if avatar
@@ -30,6 +33,8 @@ nav.container-fluid.border.px-0
             ul.dropdown-menu(aria-labelledby="profile-dropdown")
               li
                 a.dropdown-item(href="/user/profile") Profile
+              li
+                a.dropdown-item(href="/user/payment-list") Pembayaran
               li
                 a.dropdown-item.text-danger(href="/logout") Logout
       else

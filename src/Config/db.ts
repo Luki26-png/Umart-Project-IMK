@@ -379,5 +379,30 @@ export class PaymentDetailService{
     }
   }
 
-
+  public async retrieveByUserId(userId:number):Promise<RowDataPacket[]>{
+    const sqlQuery = `
+    select 
+      od.id as order_id,
+      od.user_id,
+      pd.id as payment_id,
+      pd.amount,
+      pd.status,
+      pd.created_at
+    from order_details as od
+    inner join 
+      payment_details as pd on od.id = pd.order_id
+    where 
+      od.user_id = ?;
+    `;
+    const values : number[] = [userId];
+    try {
+      const pool = DatabaseService.getPool();
+      const [rows, _fields] = await pool.query<RowDataPacket[]>(sqlQuery, values);
+      console.log(`Success retrieve payment detail with user_id ${userId}`);
+      return rows;
+    } catch (error) {
+      console.log(`Error retrieving payment details with user_id ${userId}, from PaymentDetailService.retrieveByUserId`)
+      return []
+    }
+  }
 }

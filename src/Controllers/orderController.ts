@@ -31,7 +31,7 @@ class OrderController{
                 status: OrderItemStatus.menunggu
             }
             //delete the ordered product from cart
-            const _deleteItemSuccess:boolean = await cartItemModel.deleteCartItemAfterMakeOrder(currentItem.product_id)
+            const _deleteItemSuccess:boolean = await cartItemModel.deleteCartItemAfterMakeOrder(currentItem.product_id);
             //push to the orderItems array
             orderItems.push(currentItem);
         })
@@ -58,7 +58,7 @@ class OrderController{
                 res.status(500).json({message:"Internal server error"});
                 return;
             }
-            res.status(200).json({message:"ok"});
+            res.status(200).json({message:"ok", orderId:orderDetail.id, amount: orderDetail.total});
         } catch (error) {
             throw new Error("Error from OrderController.createOrder");
         }

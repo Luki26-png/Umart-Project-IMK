@@ -221,7 +221,9 @@ document.getElementById('confirmCheckoutBtn').addEventListener('click',(event)=>
 
     xhr.onload = ()=>{
         if(xhr.status >= 200 && xhr.status < 300){
-            window.location.assign("http://"+ window.location.host + "/user/checkout");
+            let response = xhr.responseText;
+            response = JSON.parse(response);
+            window.location.assign("http://"+ window.location.host + `/user/payment?orderId=${response.orderId}&amount=${response.amount}`);
         }else{
             window.alert("Gagal membuat order");
         }
