@@ -96,6 +96,22 @@ export class CartItemModel{
         }
     }
 
+    public async deleteCartItemAfterMakeOrder(productId : number):Promise<boolean>{
+        if(!this.isNumber(this.props)){
+            throw new Error("The data type must be number to delete product, from CartItemModel.deleteCartItemAfterMakeOrder");
+        }
+        try {
+            const deleteResultOk : boolean = await this.cartItemService.deleteCartItemWithCartAndProductId(this.props, productId);
+            if(!deleteResultOk){
+              return false;  
+            }
+            return true;
+        } catch (error) {
+            console.error(`Error deleting cart Item, from CartItemModel.deleteCartItemAfterMakeOrder\n`, error);
+            return false;
+        }
+    }
+
     public async getCartItem(): Promise< {productData:RowDataPacket[], cartTotal:string} | null> {
         if (!this.isNumber(this.props)) {
             throw new Error("The data type must be number | cart_id to delete product, from CartItemModel.deleteCartItem");

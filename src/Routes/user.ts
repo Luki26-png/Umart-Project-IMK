@@ -36,6 +36,10 @@ user.get('/add-product',productController.showProductDetailPrice);
 user.get('/product-detail', productController.showProductDetail);
 user.get('/product-list',productController.showProductCardList);
 
+user.get('/payment', (req, res)=>{
+    res.render('user/payment.pug');
+});
+
 user.get('/checkout', (req, res)=>{
     res.send("<h1>checkout berhasil</h1>");
 });

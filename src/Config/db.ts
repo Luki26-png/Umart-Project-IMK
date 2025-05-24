@@ -242,10 +242,24 @@ export class CartItemService{
     try {
       const pool = DatabaseService.getPool();
       const [_rows, _fields] = await pool.query(sqlQuery, values);
-      console.log(`success deleting product with id = ${cartItemId}, from CartItemService.deleteFromCartItemTable`);
+      console.log(`success deleting cart item with id = ${cartItemId}, from CartItemService.deleteFromCartItemTable`);
       return true;
     } catch (error) {
-      console.error(`Fail to delete product with id = ${cartItemId}, from CartItemService.deleteFromCartItemTable`);
+      console.error(`Fail to delete cart item with id = ${cartItemId}, from CartItemService.deleteFromCartItemTable`);
+      return false;
+    }
+  }
+
+  public async deleteCartItemWithCartAndProductId(cartId:number, productId:number):Promise<boolean>{
+    const sqlQuery = `delete from cart_items where cart_id = ? and product_id = ?`;
+    const values : number[] = [cartId, productId];
+    try {
+      const pool = DatabaseService.getPool();
+      const [_rows, _fields] = await pool.query(sqlQuery, values);
+      console.log(`success deleting cart item with cartId = ${cartId} and productId = ${productId}, from CartItemService.deleteCartItemWithCartAndProductId`);
+      return true;
+    } catch (error) {
+      console.error(`Fail deleting cart item with cartId = ${cartId} and productId = ${productId}, from CartItemService.deleteCartItemWithCartAndProductId`);
       return false;
     }
   }

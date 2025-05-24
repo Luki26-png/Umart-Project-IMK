@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { OrderDetailModel, OrderItemModel, PaymentDetailModel } from "../Models/orderModel";
 import { OrderDetailProps, OrderItemProps, PaymentDetailProps } from "../Models/orderModel";
 import { PaymentStatus, OrderItemStatus } from "../Models/orderModel";
+import { CartItemModel } from "../Models/cartModel";
 class OrderController{
     public async createOrder(req:Request, res: Response):Promise<void>{
         if (!req.session.user_id) {
@@ -15,8 +16,12 @@ class OrderController{
             total: req.body.total
         }
 
+        //contain list of ordered item from the cart
         const orderItems: OrderItemProps[] = [];
-        req.body.orderItems.forEach((item:{ productId:number, productQuantity: number, tenggat:string}) => {
+        //initialize a cartItemModel, it used to delete the ordered item from cart
+        const cartItemModel = new CartItemModel(<number>req.session.cart_id);
+
+        req.body.orderItems.forEach(async (item:{ productId:number, productQuantity: number, tenggat:string}) => {
             const currentItem: OrderItemProps = {
                 id: Math.round(Math.random() * 1E6),
                 order_id: orderDetail.id,
@@ -25,6 +30,9 @@ class OrderController{
                 tenggat: item.tenggat,
                 status: OrderItemStatus.menunggu
             }
+            //delete the ordered product from cart
+            const _deleteItemSuccess:boolean = await cartItemModel.deleteCartItemAfterMakeOrder(currentItem.product_id)
+            //push to the orderItems array
             orderItems.push(currentItem);
         })
 
