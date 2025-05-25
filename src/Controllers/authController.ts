@@ -63,13 +63,22 @@ class AuthController{
             const initializeCartSuccess : boolean = await cartModel.initializeCart();
 
             if(registerSuccess && initializeCartSuccess){
-                console.log(registerData);
-                res.send("<h2>anda berhasil mendaftar</h2>")
+                req.session.user_id = registerData.id;
+                req.session.name = registerData.name;
+                req.session.username = getFirstWord(registerData.name);
+                req.session.email = registerData.email;
+                req.session.role = registerData.role;
+                req.session.avatar = null;
+                req.session.address = null;
+                req.session.phone_number = null;
+                req.session.cart_id = newUserCart.id;
+                //console.log(registerData);
+                res.status(200).json({message:"registration success"})
             }else{
-                res.send("<h2>anda gagal mendaftar</h2>")
+                res.status(403).json({message:"registration failed"})
             }
         } catch (error) {
-            res.send("<h1>Error when trying to Register</h1>")
+            res.status(500).json({message:"server error"})
             throw new Error(`Error in AuthController.registerAttempt\n ${error}`)
         }
     }

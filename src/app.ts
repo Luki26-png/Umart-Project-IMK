@@ -67,7 +67,11 @@ app.get('/login',(_req, res)=>{
   res.sendFile(docPath);
 });
 
-app.get('/register', (_req, res)=>{
+app.get('/register', (req, res)=>{
+  if(req.session.user_id){
+    res.redirect('/');
+    return;
+  }
   const docPath = __dirname + "/Public/static_html/register.html";
   res.sendFile(docPath);
 });

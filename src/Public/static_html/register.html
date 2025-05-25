@@ -1,122 +1,168 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Register</title>
-  <style>
-    /* Reset some browser styles */
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    body, html {
-      height: 100%;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: #333;
-      min-height: 600px; /* Mobile height constraint */
-      padding: 20px;
-    }
-    .register-container {
-      background: #fff;
-      padding: 30px 25px;
-      border-radius: 12px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-      width: 100%;
-      max-width: 320px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    h2 {
-      margin-bottom: 20px;
-      color: #4a148c;
-      font-weight: 700;
-      text-align: center;
-    }
-    form {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-    }
-    label {
-      font-weight: 600;
-      color: #5e35b1;
-      margin-bottom: 6px;
-      font-size: 0.9rem;
-    }
-    input[type="text"], input[type="email"], input[type="password"] {
-      padding: 12px 15px;
-      margin-bottom: 18px;
-      border-radius: 8px;
-      border: 1.8px solid #b39ddb;
-      font-size: 1rem;
-      transition: border-color 0.3s ease;
-      outline-offset: 2px;
-    }
-    input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus {
-      border-color: #6a1b9a;
-      outline: none;
-      box-shadow: 0 0 5px 1px rgba(106, 27, 154, 0.4);
-    }
-    button {
-      background-color: #6a1b9a;
-      color: white;
-      font-weight: 700;
-      font-size: 1.1rem;
-      padding: 12px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      margin-top: 8px;
-    }
-    button:hover {
-      background-color: #7b32c7;
-    }
-    @media (max-width: 360px) {
-      body, html {
-        padding: 15px;
-      }
-      .register-container {
-        padding: 25px 20px;
-        max-width: 100%;
-      }
-      input[type="text"], input[type="email"], input[type="password"] {
-        padding: 10px 12px;
-        font-size: 0.95rem;
-      }
-      button {
-        font-size: 1rem;
-        padding: 10px;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/public/styles/register.css">
+    <title>Sign Up</title>
 </head>
 <body>
-  <div class="register-container" role="main" aria-label="Registration form">
-    <h2>Register</h2>
-    <form action="authentication/register" method="POST" novalidate>
-      <label for="fullname">Full Name</label>
-      <input id="fullname" name="name" type="text" placeholder="Your full name" required autocomplete="name" />
-      
-      <label for="email">Email</label>
-      <input id="email" name="email" type="email" placeholder="you@example.com" required autocomplete="email" />
-      
-      <label for="password">Password</label>
-      <input id="password" name="password" type="password" placeholder="Enter your password" required autocomplete="new-password" />
-      
-      <label for="confirm-password">Confirm Password</label>
-      <input id="confirm-password" name="confirm-password" type="password" placeholder="Confirm your password" required autocomplete="new-password" />
-      
-      <button type="submit" aria-label="Submit registration form">Register</button>
-    </form>
-  </div>
+    <div id="main-container">
+        <div id="form-section">
+            <h1 id="heading" class="kaisei-tokumin-extrabold">SIGN UP</h1>
+            <form action="#" method="post" id="form-fields">
+                
+                <div class="input-fields kaisei-tokumin-regular">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+
+                <div class="input-fields kaisei-tokumin-regular">
+                    <label for="email">E-mail:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+                <div class="input-fields kaisei-tokumin-regular">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+
+                <div class="input-fields kaisei-tokumin-regular">
+                    <label for="confirm-password">Confirm Password:</label>
+                    <input type="password" id="confirm-password" name="confirm-password" required>
+                </div>
+
+                <div class="kaisei-tokumin-regular">
+                    <input type="checkbox" id="terms" name="terms" required>
+                    <label for="terms" class="checkbox-label">I agree to Terms of Service and Privacy Policy</label>
+                </div>
+
+                <input type="submit" value="Sign Up" id="submit-button">
+            </form>
+            <p id="create-account">Already have an account?<a href="login.html" style="text-decoration: none;"> Sign in</a></p>
+        </div>
+        <div id="image-section">
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="modal">
+        <div class="modal-content kaisei-tokumin-regular">
+            <p>Sign up successful!</p>
+            <button id="modalOkeButton">Oke</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('form-fields').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            // Get form elements
+            const fullNameInput = document.getElementById('name');
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            const confirmPasswordInput = document.getElementById('confirm-password');
+            const termsCheckbox = document.getElementById('terms');
+            // Modal elements
+            const successModal = document.getElementById('successModal');
+            const modalOkeButton = document.getElementById('modalOkeButton');
+
+            // Get form values
+            const fullName = fullNameInput.value.trim();
+            const email = emailInput.value.trim();
+            const password = passwordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+            const termsAgreed = termsCheckbox.checked;
+
+            // --- Input Validations ---
+
+            // Check for empty fields
+            if (!fullName) {
+                alert('Please enter your Full Name.');
+                fullNameInput.focus();
+                return;
+            }
+            if (!email) {
+                alert('Please enter your E-mail.');
+                emailInput.focus();
+                return;
+            }
+            if (!password) {
+                alert('Please enter a Password.');
+                passwordInput.focus();
+                return;
+            }
+            if (!confirmPassword) {
+                alert('Please confirm your Password.');
+                confirmPasswordInput.focus();
+                return;
+            }
+
+            // Check if passwords match
+            if (password !== confirmPassword) {
+                alert('Passwords do not match. Please re-enter.');
+                passwordInput.value = '';
+                confirmPasswordInput.value = '';
+                passwordInput.focus();
+                return;
+            }
+
+            // Check if terms are agreed
+            if (!termsAgreed) {
+                alert('You must agree to the Terms of Service and Privacy Policy to register.');
+                termsCheckbox.focus();
+                return;
+            }
+
+            // --- Prepare data for sending ---
+            const data = {
+                name: fullName,
+                email: email,
+                password: password
+            };
+
+            // --- Send data using XMLHttpRequest ---
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', 'http://localhost:8080/authentication/register', true);
+            xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8'); // Corrected charset typo
+
+            xhr.onload = function () {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    // Success
+                    document.getElementById('form-fields').reset(); // Clear the form
+                    successModal.style.display = 'block'; // Show the modal
+                } else {
+                    // Error
+                    let errorMessage = 'Registration failed. Please try again.';
+                    try {
+                        const response = JSON.parse(xhr.responseText);
+                        if (response && response.message) {
+                            errorMessage = response.message;
+                        } else if (xhr.responseText) {
+                            errorMessage = `Registration failed: ${xhr.responseText}`;
+                        }
+                    } catch (e) {
+                        // xhr.responseText was not JSON or empty
+                        errorMessage = `Registration failed. Server responded with: ${xhr.status}`;
+                    }
+                    alert(errorMessage);
+                }
+            };
+
+            xhr.onerror = function () {
+                // Network error or other issues
+                alert('An error occurred during registration. Please try again.');
+            };
+
+            xhr.send(JSON.stringify(data));
+        });
+
+        // Event listener for the modal's "Oke" button
+        document.getElementById('modalOkeButton').addEventListener('click', function() {
+            document.getElementById('successModal').style.display = 'none'; // Hide the modal
+            window.location.href = '/'; // Redirect to homepage
+        });
+    </script>
 </body>
 </html>
-
