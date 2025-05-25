@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import formatNumberString from "../Logics/numberFormatter";
 import ProductCardListModel from "../Models/productCardModel";
-import Product, {ProductProps, ProductDetail} from "../Models/productModel";
+import Product, {ProductProps, ProductDetail, ProductSearch} from "../Models/productModel";
 
 class ProductController{
     public async addNewProduct(req: Request, res: Response): Promise<void>{
@@ -94,6 +94,22 @@ class ProductController{
 
         } catch (error) {
             console.error("error showing product detail, from ProductController.showProductDetailPrice");
+        }
+    }
+
+    public async findProductName(req:Request, res:Response):Promise<void>{
+        //get the query
+        const productQuery = <string>req.query.q;
+        const productSearch = new ProductSearch();
+        try {
+            const products = await productSearch.searchProduct(productQuery);
+            if(products == null){
+                res.status(200).json({products:[]});
+                return;
+            }
+            res.status(200).json({products:products});
+        } catch (error) {
+            console.error("Error searching product, from ProductController.findProductName");
         }
     }
 }

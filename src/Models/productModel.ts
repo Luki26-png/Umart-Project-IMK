@@ -1,3 +1,4 @@
+import { RowDataPacket } from "mysql2";
 import { ProductService} from "../Config/db";
 export interface ProductProps{
     id: number;
@@ -79,6 +80,28 @@ export class ProductDetail{
             
         } catch (error) {
             console.error(`error retrieving product with id ${id}, from ProductCardList.getOneProduct`)
+            return null;
+        }
+    }
+}
+
+export class ProductSearch{
+    private productService: ProductService;
+
+    public constructor(){
+        this.productService = new ProductService();
+    }
+
+    public async searchProduct(productName: string):Promise<RowDataPacket[] | null>{
+        try {
+            const productList = await this.productService.retrieveByName(productName);
+            if (productList.length == 0) {
+                console.log(`Product like %${productName}% doesn't exist, from ProductSearch.searchProduct`);
+                return null;
+            }
+            return productList;
+        } catch (error) {
+            console.error(`error retrieving Product like %${productName}% , from ProductSearch.searchProduct\n${error}`);
             return null;
         }
     }

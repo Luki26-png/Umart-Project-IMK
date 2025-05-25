@@ -20,5 +20,6 @@ const product = express.Router();
 const productController = new ProductController();
 
 product.post('/product', upload.single('img-file'), productController.addNewProduct);
+product.get('/find-product', productController.findProductName);
 
 export default product;

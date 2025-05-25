@@ -66,6 +66,19 @@ export class ProductService {
     
   }
 
+  public async retrieveByName(productName:string):Promise<RowDataPacket[]>{
+    const sqlQuery = `select id, name, cover, summary from products where name like ?;`;
+    const values = [`%${productName}%`];
+    try {
+      const pool = DatabaseService.getPool();
+      const [rows, _fields] = await pool.query<RowDataPacket[]>(sqlQuery, values);
+      return rows;
+    } catch (error) {
+      console.log("Error in searching product data in ProductService.retrieveByName\n", error);
+      return []
+    }
+  }
+
   public async retriveProductCardData(limit:number):Promise<RowDataPacket[]>{
     const sqlQuery = `select id, name, summary, cover, category from products limit ?`;
     const values : number[] = [limit];

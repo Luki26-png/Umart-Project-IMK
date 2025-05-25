@@ -2,7 +2,7 @@ nav.container-fluid.border.px-0
   #navbar-content.d-sm-flex.flex-sm-wrap.justify-content-between.px-5
 
     #navbar-logo.my-1
-      img(src="public/icons/nav_logo.svg", alt="website-logo")
+      img(src="/public/icons/nav_logo.svg", alt="website-logo")
 
     #navbar-menu.d-sm-flex.flex-wrap.justify-content-around(style="width: 50%;")
       #nav-home.d-flex.flex-wrap.align-content-center
@@ -16,15 +16,18 @@ nav.container-fluid.border.px-0
 
     #navbar-icon.d-sm-flex.flex-sm-wrap.justify-content-between.align-content-center
       .d-flex.justify-content-between.align-content-center
-        img#nav-cart-icon.d-block(width="30", height="30", src="public/icons/cart-60.png", alt="shopping-cart",  data-bs-toggle="tooltip", title="Lihat Keranjang")
-        img#nav-notification-icon.d-block.mx-4.dropdown-toggle(width="30", height="30", src="public/icons/notification-48.png", data-bs-toggle="dropdown", aria-expanded="false")
-        ul.dropdown-menu.p-3(aria-labelledby="nav-notification")
-          li
-            small Tidak ada notifikasi
+        img#nav-cart-icon.d-block(width="30", height="30", src="/public/icons/cart-60.png", alt="shopping-cart",  data-bs-toggle="tooltip", title="Lihat Keranjang")
+        if name
+          img#nav-notification-icon.d-block.mx-4.dropdown-toggle(width="30", height="30", src="/public/icons/notification-48.png", data-bs-toggle="dropdown", aria-expanded="false")
+          ul.dropdown-menu.p-3(aria-labelledby="nav-notification")
+            li
+              small Tidak ada notifikasi
+        else 
+          img#nav-notification-icon.d-block.mx-4.dropdown-toggle(width="30", height="30", src="/public/icons/notification-48.png")
       if name
         .d-flex.justify-content-start.align-content-center
           if avatar
-            #navbar-profile-picture(style=`background-image: url('public/user_avatar/${avatar}');`)
+            #navbar-profile-picture(style=`background-image: url('/public/user_avatar/${avatar}');`)
           else
             #navbar-profile-picture(style="background-image: url('https://imageplaceholder.net/600');")
           .dropdown.d-flex.justify-content-between.align-content-center
