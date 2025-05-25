@@ -72,6 +72,16 @@ app.get('/register', (_req, res)=>{
   res.sendFile(docPath);
 });
 
+app.get('/about-us', (req, res)=>{
+  if (!req.session.user_id) {
+    res.render('user/aboutus.pug', {name:null, avatar:null})
+    return;
+  }
+  let userName = req.session.username;
+  let avatar = req.session.avatar;
+  res.render('user/aboutus.pug',{name:userName, avatar:avatar})
+});
+
 app.use('/authentication', authentication);
 app.use('/homepage', homepage);
 

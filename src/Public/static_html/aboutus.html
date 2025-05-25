@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../styles/global.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        @media screen and (max-width:800px) {
+            #about-description{
+                flex-direction: column !important;
+            }
+
+            #aboutus-text{
+                width: 100% !important;
+                text-align: center;
+            }
+
+            
+        }
+
+        @media screen and (max-width:950px){
+            #about-card-container{
+                flex-direction: column !important;
+            }
+
+            .about-card{
+                width: 50% !important;
+            }
+        }
+
+        @media screen and (max-width:670px){
+            .about-card{
+                width: 80% !important;
+            }
+        }
+    </style>
+    <title>About Us</title>
+</head>
+<body>
+    <main class="container-fluid px-5 my-5">
+        <div class="d-flex flex-wrap justify-content-around align-items-center" id="about-description">
+            <div id="img-container" class="w-50 d-flex justify-content-center">
+                <img src="../icons/nav_logo.svg" class="img-fluid" alt="about us image" style="height: 150px;">
+            </div>
+            <div class="w-50 px-5" id="aboutus-text">
+                <h2 class="pb-4"><span class="fw-bold">Tentang</span> Kami</h2>
+                <p>
+                    Umart ialah sebuah platform berbasis website yang dirancang untuk membantu 
+                    UMKM sektor maritim di Provinsi Kepulauan Riau mendigitalisasi proses penjualan 
+                    produk hasil laut dan budidaya. Website ini memungkinkan pelaku UMKM menjangkau 
+                    konsumen lebih luas, meningkatkan penjualan, serta memberikan kemudahan dalam 
+                    transaksi dan promosi produk secara online.
+                </p>
+            </div>
+        </div>
+        <div class="py-5">
+            <h2 class="text-center">Kenapa Umart ?</h2>
+        </div>
+        <div class="d-flex flex-wrap justify-content-around align-items-center" id="about-card-container">
+            <div class="border w-25 p-3 my-4 border border-dark rounded-1 about-card" style="background-color: #F5F5F5;">
+                <h5 class="fw-bold">Dibuat Khusus Untuk UMKM Maritim</h5>
+                <p>Kami memahami bahwa sektor maritim punya tantangan unik. Umart hadir sebagai solusi .</p>
+            </div>
+            <div class="w-25 p-3 my-4 border border-dark rounded-1  about-card" style="background-color: #F5F5F5;">
+                <h5 class="fw-bold">Tingkatkan Nilai Produk Lokal</h5>
+                <p>Kami bantu kamu memasarkan, dan memperluas jangkauan produk hasil laut dan budidaya.</p>
+            </div>
+        </div>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
