@@ -1,10 +1,15 @@
 import express from 'express';
+import http from 'http';
+import {Server} from 'socket.io';
+
 //database configuration
 import { DatabaseService } from './Config/db';
 DatabaseService.init();
 //middleware
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
+//firebase listnere
+import { watchPayments } from './Config/firebaseListener';
 
 //routes
 import authentication from './Routes/authentication';
@@ -17,6 +22,12 @@ import order from './Routes/order';
 import payment from './Routes/payment';
 
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "*", // adjust as needed
+  }
+});
 const port : number = 8080;
 
 app.use(cookieParser());
@@ -31,6 +42,21 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.set('view engine', 'pug');
 app.set('views', __dirname + "/" + 'Views');
+
+io.on('connection', (socket) => {
+  console.log('📡 Client connected:', socket.id);
+
+  socket.on('join-order-room', (orderId) => {
+    const roomName = `order-${orderId}`;
+    socket.join(roomName);
+    console.log(`🛎️ Client ${socket.id} joined room ${roomName}`);
+  });
+});
+
+app.set('io', io);
+
+const startWatching = watchPayments(io);
+app.set("watchPayments", startWatching);
 
 app.get('/', (_req, res) => {
     res.redirect('/homepage/');
@@ -64,6 +90,6 @@ app.use('/api', order);
 app.use('/api', payment);
 app.use('/admin', admin);
 
-app.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`);
+server.listen(port, () => {
+  console.log(`✅ Server + WebSocket listening on http://localhost:${port}`);
 });

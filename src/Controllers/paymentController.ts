@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { PaymentDetailModel, OrderDetailModel, OrderItemModel, OrderItemStatus} from "../Models/orderModel";
+import { PaymentDetailModel} from "../Models/orderModel";
 
 class PaymentController{
     public async showPaymentList(req:Request, res:Response):Promise<void>{
@@ -47,31 +47,6 @@ class PaymentController{
             orderId: orderId,
             second_passed: second_passed}
         );
-    }
-
-    public async checkPaymentCompletion(req: Request, res: Response): Promise<void> {
-        const orderId: number = <number>req.body.orderId;
-        const orderDetailModel = new OrderDetailModel(null);
-
-        const paymentComplete = await orderDetailModel.checkOrderPayment(orderId);
-
-        if (!paymentComplete) {
-            // Payment not complete yet – delay and respond with "no"
-            setTimeout(() => {
-                res.status(200).json({ message: "no" });
-            }, 3000); // Wait 3s before responding
-            return;
-        }
-
-        // Payment is complete – update status and respond immediately
-        const paymentDetailModel = new PaymentDetailModel(null);
-        const orderItemModel = new OrderItemModel();
-
-        await paymentDetailModel.updatePaymentDetailStatusLunas(orderId);
-        await orderItemModel.updateOrderItemStatus(orderId, OrderItemStatus.diproses);
-
-        // Respond right away (no setTimeout needed)
-        res.status(200).json({ message: "yes" });
     }
 }
 export default PaymentController;

@@ -1,6 +1,6 @@
 import { RowDataPacket } from "mysql2";
 import { OrderDetailService, OrderItemService, PaymentDetailService } from "../Config/db";
-import { readOrderId } from "../Config/firebase";
+//import { readOrderId } from "../Config/firebase";
 
 export enum PaymentStatus{
     lunas = "lunas",
@@ -78,19 +78,19 @@ export class OrderDetailModel{
         }
     }
 
-    public async checkOrderPayment(orderId :number):Promise<boolean>{
-        try {
-            const paymentComplete:boolean = await readOrderId(orderId);
-            if(!paymentComplete){
-                return false;
-            }
-            console.log(`Payment for order id = ${orderId} is complete, from OrderDetailModel.checkOrderPayment`);
-            return true
-        } catch (error) {
-            console.error(`error paying for items with order id ${orderId}, from OrderDetailModel.checkOrderPayment\n ${error}`)
-            return false;
-        }
-    }
+    // public async checkOrderPayment(orderId :number):Promise<boolean>{
+    //     try {
+    //         const paymentComplete:boolean = await readOrderId(orderId);
+    //         if(!paymentComplete){
+    //             return false;
+    //         }
+    //         console.log(`Payment for order id = ${orderId} is complete, from OrderDetailModel.checkOrderPayment`);
+    //         return true
+    //     } catch (error) {
+    //         console.error(`error paying for items with order id ${orderId}, from OrderDetailModel.checkOrderPayment\n ${error}`)
+    //         return false;
+    //     }
+    // }
 
     private isOrderDetailProps(data:any):data is OrderDetailProps{
         return(

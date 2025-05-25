@@ -1,8 +1,8 @@
 import { initializeApp } from "firebase/app";
-import { getDatabase, ref, set, get,remove } from "firebase/database"; // Changed 'set' to 'push'
+import { getDatabase, ref, set, get,remove, onValue } from "firebase/database"; // Changed 'set' to 'push'
 import firebaseConfig from "./firebaseConfig";
 const fbApp = initializeApp(firebaseConfig);
-const database = getDatabase(fbApp);
+export const database = getDatabase(fbApp);
 
 export async function writeNewOrderId(orderId: number) {
     const orderRef = ref(database, 'Payments/');

@@ -1,44 +1,42 @@
-const orderId = parseInt(document.querySelector('.order-id').id, 10);
+  // ✅ Get orderId from a DOM element
+  const orderId = parseInt(document.querySelector('.order-id').id, 10);
 
-function startLongPolling() {
-    const xhr = new XMLHttpRequest();
-    xhr.open("POST", `http://${location.host}/api/payment`, true);
-    xhr.setRequestHeader("Content-Type", "application/json");
+  // ✅ Connect to WebSocket server
+  const socket = io("http://localhost:8080");
 
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4) {
-            if (xhr.status === 200) {
-                try {
-                    const json = JSON.parse(xhr.responseText);
-                    console.log("Server message:", json.message);
+  socket.on("connect", () => {
+    console.log("🔌 Connected to WebSocket");
 
-                    if (json.message === "yes") {
-                        console.log("✅ Payment confirmed. Stopping polling.");
-                        // Optionally handle success here
-                        window.location.assign("http://" + window.location.host + `/api/payment-success?orderId=${orderId}`);
-                        return;
-                    } else {
-                        // Keep polling if message is not "yes"
-                        startLongPolling();
-                    }
-                } catch (err) {
-                    console.error("Failed to parse response:", err);
-                    setTimeout(startLongPolling, 3000);
-                }
-            } else {
-                // On error, retry after delay
-                console.warn("Polling failed, retrying in 3s...");
-                setTimeout(startLongPolling, 3000);
-            }
-        }
-    };
+    // ✅ Join the specific order room
+    socket.emit("join-order-room", orderId);
+    console.log(`📦 Joined room: order-${orderId}`);
 
-    xhr.onerror = function () {
-        console.error("Network error, retrying in 3s...");
-        setTimeout(startLongPolling, 3000);
-    };
+    // ✅ Trigger Firebase listener by hitting your /api/payment route
+    fetch("/api/payment", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ orderId: orderId })
+    })
+    .then(res => res.json())
+    .then(data => {
+      console.log("📬 Started watching payment:", data);
+    })
+    .catch(err => {
+      console.error("❌ Failed to start watching:", err);
+    });
+  });
 
-    xhr.send(JSON.stringify({ orderId: orderId }));
-}
+  // ✅ Handle payment confirmation
+  socket.on("payment-success", (data) => {
+    console.log("✅ Payment confirmed:", data);
 
-startLongPolling();
+    // Redirect to payment success page
+    window.location.href = `/api/payment-success?orderId=${orderId}`;
+  });
+
+  // Optional error handling
+  socket.on("connect_error", (err) => {
+    console.error("❌ WebSocket connection error:", err.message);
+  });
