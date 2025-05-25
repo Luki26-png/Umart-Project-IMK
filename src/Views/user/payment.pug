@@ -31,7 +31,7 @@ html(lang='en')
     script(src='/public/script/httpPolling.js')
     script.
       document.getElementById('download-btn').addEventListener('click', () => {
-        const img = document.querySelector('#qr-code img');
+        const img = document.querySelector('.qr-code img');
         if (img && img.src) {
           const a = document.createElement('a');
           a.href = img.src;
