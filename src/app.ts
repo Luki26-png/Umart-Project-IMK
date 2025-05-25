@@ -108,6 +108,12 @@ app.use('/api', order);
 app.use('/api', payment);
 app.use('/admin', admin);
 
+//route to hancle 404 page
+app.use((_req, res) => {
+  const docPath = __dirname + "/Public/static_html/404.html";
+  res.status(404).sendFile(docPath);
+});
+
 server.listen(port, () => {
   console.log(`✅ Server + WebSocket listening on http://localhost:${port}`);
 });

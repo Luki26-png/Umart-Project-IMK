@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import path from "path";
 import formatNumberString from "../Logics/numberFormatter";
 import ProductCardListModel from "../Models/productCardModel";
 import Product, {ProductProps, ProductDetail, ProductSearch} from "../Models/productModel";
@@ -75,7 +76,8 @@ class ProductController{
 
     public async showProductDetailPrice(req: Request, res: Response):Promise<void>{
         if(!req.session.user_id){
-            res.send("<h3>You have to login first</h3>");
+            const page401 = path.join(__dirname,"..", "Public", "static_html", "401.html");
+            res.status(401).sendFile(page401);
             return;
         }
         let productId: number = Number(req.query.id);

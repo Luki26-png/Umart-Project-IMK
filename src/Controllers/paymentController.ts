@@ -1,10 +1,12 @@
 import { Request, Response } from "express";
+import path from "path";
 import { PaymentDetailModel} from "../Models/orderModel";
+const page401 = path.join(__dirname,"..", "Public", "static_html", "401.html");
 
 class PaymentController{
     public async showPaymentList(req:Request, res:Response):Promise<void>{
         if (!req.session.user_id) {
-            res.send("<h1>Unauthorized</h1>");
+            res.status(401).sendFile(page401);
             return;
         }
 
@@ -27,7 +29,7 @@ class PaymentController{
 
     public async showPaymentPage(req:Request, res:Response):Promise<void>{
         if (!req.session.user_id) {
-            res.send("<h1>Unauthorized</h1>");
+            res.status(401).sendFile(page401);
             return;
         }
         if (!req.query.orderId || !req.query.amount || !req.query.second_passed) {

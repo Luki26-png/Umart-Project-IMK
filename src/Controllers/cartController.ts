@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import path from "path";
 import { CartItemProps, CartItemModel } from "../Models/cartModel";
 import HttpStatusCode from "../Logics/httpStatusCode";
 
@@ -51,7 +52,8 @@ class CartController{
 
     public async showCart(req: Request, res: Response):Promise<void>{
         if(!req.session.user_id){
-            res.status(HttpStatusCode.Unauthorized).send("<h3>You're not authorized to see this page</h3>");
+            const page401 = path.join(__dirname,"..", "Public", "static_html", "401.html");
+            res.status(401).sendFile(page401);
             return;
         }
         const cartId : number = <number>req.session.cart_id;

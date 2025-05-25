@@ -1,12 +1,15 @@
 import { Request, Response } from "express";
+import path from "path";
 import HttpStatusCode from "../Logics/httpStatusCode";
 import { getFirstWord } from "../Logics/stringMod";
 import { UserUpdateProps, UserModel } from "../Models/userModel";
 
+const page401 = path.join(__dirname,"..", "Public", "static_html", "401.html");
+
 class UserController{
     public async showProfile(req :Request, res : Response):Promise<void>{
         if (!req.session.user_id) {
-            res.send("<h3>You're not authorized to see this page</h3>")
+            res.status(401).sendFile(page401);
             return;
         }
         try {
@@ -24,7 +27,7 @@ class UserController{
 
     public async updateProfile(req: Request, res: Response):Promise<void>{
         if(!req.session.user_id){
-            res.status(HttpStatusCode.Unauthorized).send("<h3>You have to login first</h3>");
+            res.status(401).json({message:"forbidden"});
             return;
         }
 

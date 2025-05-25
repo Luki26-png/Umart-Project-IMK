@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import path from "path";
 import { OrderDetailModel, OrderItemModel, 
     PaymentDetailModel,  PaymentStatus, OrderItemStatus,  
     OrderDetailProps, OrderItemProps, PaymentDetailProps } from "../Models/orderModel";
@@ -8,7 +9,7 @@ import { writeNewOrderId } from "../Config/firebase";
 class OrderController{
     public async createOrder(req:Request, res: Response):Promise<void>{
         if (!req.session.user_id) {
-            res.json({message:"UnAuthorized"})
+            res.status(401).json({message:"UnAuthorized"})
             return;
         }
         const orderDetail: OrderDetailProps = {
@@ -69,7 +70,8 @@ class OrderController{
 
     public async showOrder(req: Request, res: Response):Promise<void>{
         if (!req.session.user_id) {
-            res.send("<h1>Unauthorized</h1>")
+            const page401 = path.join(__dirname,"..", "Public", "static_html", "401.html");
+            res.status(401).sendFile(page401);
             return;
         }
         const user_id:number = <number>req.session.user_id;
