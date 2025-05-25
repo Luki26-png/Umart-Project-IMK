@@ -13,7 +13,7 @@ class AuthController{
             const authModel : AuthModel = new AuthModel(loginData);
             const userData =  await authModel.login();
             if (userData == null) {
-                res.send("<h1> tidak terdaftar didatabase</h1>") 
+                res.status(403).json({message:"login failed"})
             }else{
                 //console.log(userData);
                 res.cookie("user_id", userData.id);
@@ -26,10 +26,10 @@ class AuthController{
                 req.session.address = userData.address;
                 req.session.phone_number = userData.phone_number;
                 req.session.cart_id = userData.cart_id;
-                res.redirect('/');
+                res.status(200).json({message:"login success"});
             }
         } catch (error) {
-            res.send("<h1>error woy</h1>")
+            res.status(500).json({message:"server error"})
             //res.status(500).json({ error: 'Internal server error' });
             throw new Error(`Error in AuthController.loginAttempt\n ${error}`);
         }

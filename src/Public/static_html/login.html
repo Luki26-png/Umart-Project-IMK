@@ -2,115 +2,115 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Login</title>
-  <style>
-    /* Reset some browser styles */
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    body, html {
-      height: 100%;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: #333;
-      min-height: 600px; /* Mobile height constraint */
-      padding: 20px;
-    }
-    .login-container {
-      background: #fff;
-      padding: 30px 25px;
-      border-radius: 12px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-      width: 100%;
-      max-width: 320px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    h2 {
-      margin-bottom: 20px;
-      color: #4a148c;
-      font-weight: 700;
-      text-align: center;
-    }
-    form {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-    }
-    label {
-      font-weight: 600;
-      color: #5e35b1;
-      margin-bottom: 6px;
-      font-size: 0.9rem;
-    }
-    input[type="email"], input[type="password"] {
-      padding: 12px 15px;
-      margin-bottom: 18px;
-      border-radius: 8px;
-      border: 1.8px solid #b39ddb;
-      font-size: 1rem;
-      transition: border-color 0.3s ease;
-      outline-offset: 2px;
-    }
-    input[type="email"]:focus, input[type="password"]:focus {
-      border-color: #6a1b9a;
-      outline: none;
-      box-shadow: 0 0 5px 1px rgba(106, 27, 154, 0.4);
-    }
-    button {
-      background-color: #6a1b9a;
-      color: white;
-      font-weight: 700;
-      font-size: 1.1rem;
-      padding: 12px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      margin-top: 8px;
-    }
-    button:hover {
-      background-color: #7b32c7;
-    }
-    @media (max-width: 360px) {
-      body, html {
-        padding: 15px;
-      }
-      .login-container {
-        padding: 25px 20px;
-        max-width: 100%;
-      }
-      input[type="email"], input[type="password"] {
-        padding: 10px 12px;
-        font-size: 0.95rem;
-      }
-      button {
-        font-size: 1rem;
-        padding: 10px;
-      }
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login - Umart</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="/public/styles/login.css" />
 </head>
 <body>
-  <div class="login-container" role="main" aria-label="Login form">
-    <h2>Login</h2>
-    <form action="/authentication/login" method="POST" novalidate>
-      <label for="email">Email</label>
-      <input id="email" name="email" type="email" placeholder="you@example.com" required autocomplete="email" />
-      
-      <label for="password">Password</label>
-      <input id="password" name="password" type="password" placeholder="Enter your password" required autocomplete="current-password" />
-      
-      <button type="submit" aria-label="Submit login form">Log In</button>
-    </form>
+  <div class="split-background">
+    <div class="left-half"></div>
+    <div class="right-half"></div>
+  </div>
+
+  <div class="login-container">
+    <div class="logo-wrapper">
+        <img src="/public/icons/nav_logo.svg" alt="Umart Logo" class="logo" />
+    </div>
+    <div class="login-card">
+      <h2>Sign in to your account</h2>
+      <form action="/login" method="POST">
+        <label for="email">Email</label>
+        <input id="email" type="email" name="email" placeholder="Enter your email" required />
+
+       <label for="password">Password</label>
+        <div class="password-wrapper">
+          <input type="password" id="password" name="password" placeholder="Insert your password" required />
+        </div>
+
+        <div class="forgot">
+          <a href="#">Forgot password?</a>
+        </div>
+
+        <button type="submit">SIGN IN</button>
+      </form>
+
+      <p class="signup-text">
+        Don’t have an account? <a href="/register">Sign Up</a>
+      </p>
+    </div>
+    <script>
+      function togglePassword() {
+        const pwd = document.getElementById('password');
+        const icon = document.querySelector('.toggle-password');
+        if (pwd.type === 'password') {
+          pwd.type = 'text';
+          icon.classList.remove('fa-eye');
+          icon.classList.add('fa-eye-slash');
+        } else {
+          pwd.type = 'password';
+          icon.classList.remove('fa-eye-slash');
+          icon.classList.add('fa-eye');
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', function() {
+        const loginForm = document.querySelector('.login-card form');
+
+        if (loginForm) {
+          loginForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+
+            const email = emailInput.value;
+            const password = passwordInput.value;
+
+            if (!email || !password) {
+              alert('Please enter both email and password.');
+              return;
+            }
+
+            const xhr = new XMLHttpRequest();
+            const url = 'http://localhost:8080/authentication/login';
+
+            xhr.open('POST', url, true);
+            xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+
+            xhr.onreadystatechange = function() {
+              if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                  window.location.href = '/'; // Redirect on success
+                } else {
+                  let errorMessage = `Login failed with status: ${xhr.status}`;
+                  if (xhr.responseText) {
+                    try {
+                      const responseJson = JSON.parse(xhr.responseText);
+                      if (responseJson && responseJson.message) {
+                        errorMessage = responseJson.message;
+                      } else if (typeof xhr.responseText === 'string' && xhr.responseText.trim() !== '') {
+                        errorMessage = `Login failed: ${xhr.status} - ${xhr.responseText}`;
+                      }
+                    } catch (e) {
+                       if (typeof xhr.responseText === 'string' && xhr.responseText.trim() !== '') {
+                        errorMessage = `Password atau Email yang anda masukkan salah: ${xhr.status} - ${xhr.responseText}`;
+                      }
+                    }
+                  }
+                  alert(errorMessage);
+                }
+              }
+            };
+            xhr.onerror = function () {
+              alert('An error occurred while trying to connect to the server. Please check your network connection and ensure the server is running.');
+            };
+            const data = JSON.stringify({ email: email, password: password });
+            xhr.send(data);
+          });
+        }
+      });
+  </script>
   </div>
 </body>
 </html>
-

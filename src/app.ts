@@ -62,7 +62,11 @@ app.get('/', (_req, res) => {
     res.redirect('/homepage/');
 });
 
-app.get('/login',(_req, res)=>{
+app.get('/login',(req, res)=>{
+  if(req.session.user_id){
+    res.redirect('/');
+    return;
+  }
   const docPath = __dirname + "/Public/static_html/login.html";
   res.sendFile(docPath);
 });

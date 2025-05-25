@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Register</title>
+  <title>Login</title>
   <style>
     /* Reset some browser styles */
     * {
@@ -22,7 +22,7 @@
       min-height: 600px; /* Mobile height constraint */
       padding: 20px;
     }
-    .register-container {
+    .login-container {
       background: #fff;
       padding: 30px 25px;
       border-radius: 12px;
@@ -50,7 +50,7 @@
       margin-bottom: 6px;
       font-size: 0.9rem;
     }
-    input[type="text"], input[type="email"], input[type="password"] {
+    input[type="email"], input[type="password"] {
       padding: 12px 15px;
       margin-bottom: 18px;
       border-radius: 8px;
@@ -59,7 +59,7 @@
       transition: border-color 0.3s ease;
       outline-offset: 2px;
     }
-    input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus {
+    input[type="email"]:focus, input[type="password"]:focus {
       border-color: #6a1b9a;
       outline: none;
       box-shadow: 0 0 5px 1px rgba(106, 27, 154, 0.4);
@@ -83,11 +83,11 @@
       body, html {
         padding: 15px;
       }
-      .register-container {
+      .login-container {
         padding: 25px 20px;
         max-width: 100%;
       }
-      input[type="text"], input[type="email"], input[type="password"] {
+      input[type="email"], input[type="password"] {
         padding: 10px 12px;
         font-size: 0.95rem;
       }
@@ -99,24 +99,16 @@
   </style>
 </head>
 <body>
-  <div class="register-container" role="main" aria-label="Registration form">
-    <h2>Register</h2>
-    <form action="authentication/register" method="POST" novalidate>
-      <label for="fullname">Full Name</label>
-      <input id="fullname" name="name" type="text" placeholder="Your full name" required autocomplete="name" />
-      
+  <div class="login-container" role="main" aria-label="Login form">
+    <h2>Login</h2>
+    <form action="/authentication/login" method="POST" novalidate>
       <label for="email">Email</label>
       <input id="email" name="email" type="email" placeholder="you@example.com" required autocomplete="email" />
       
       <label for="password">Password</label>
-      <input id="password" name="password" type="password" placeholder="Enter your password" required autocomplete="new-password" />
+      <input id="password" name="password" type="password" placeholder="Enter your password" required autocomplete="current-password" />
       
-      <label for="confirm-password">Confirm Password</label>
-      <input id="confirm-password" name="confirm-password" type="password" placeholder="Confirm your password" required autocomplete="new-password" />
-      
-      
-
-      <button type="submit" aria-label="Submit registration form">Register</button>
+      <button type="submit" aria-label="Submit login form">Log In</button>
     </form>
   </div>
 </body>
