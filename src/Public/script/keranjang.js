@@ -168,6 +168,10 @@ document.getElementById('checkout-button').addEventListener('click', (event)=>{
     event.preventDefault();
 
     const itemCard = document.querySelectorAll('.card');
+    if (itemCard.length == 0) {
+        window.alert("Keranjang belanja masih kosong");
+        return;
+    }
     itemCard.forEach((item)=>{
         const quantity = parseInt(item.querySelector('.item-quantity').innerHTML, 10);
         if (quantity == 0) {
@@ -223,7 +227,8 @@ document.getElementById('confirmCheckoutBtn').addEventListener('click',(event)=>
         if(xhr.status >= 200 && xhr.status < 300){
             let response = xhr.responseText;
             response = JSON.parse(response);
-            window.location.assign("http://"+ window.location.host + `/user/payment?orderId=${response.orderId}&amount=${response.amount}&second_passed=86400`);
+            let second_passed = 0;
+            window.location.assign("http://"+ window.location.host + `/user/payment?orderId=${response.orderId}&amount=${response.amount}&second_passed=${second_passed}`);
         }else{
             window.alert("Gagal membuat order");
         }

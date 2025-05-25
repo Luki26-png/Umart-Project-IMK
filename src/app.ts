@@ -2,7 +2,6 @@ import express from 'express';
 //database configuration
 import { DatabaseService } from './Config/db';
 DatabaseService.init();
-
 //middleware
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
@@ -15,6 +14,7 @@ import product from './Routes/product';
 import homepage from './Routes/homepage';
 import cart from './Routes/cart';
 import order from './Routes/order';
+import payment from './Routes/payment';
 
 const app = express();
 const port : number = 8080;
@@ -56,10 +56,12 @@ app.get('/logout', (req, res)=>{
   res.redirect('/homepage/');
 });
 
+
 app.use('/user', user);
 app.use('/api', product);
 app.use('/api', cart);
 app.use('/api', order);
+app.use('/api', payment);
 app.use('/admin', admin);
 
 app.listen(port, () => {

@@ -1,5 +1,6 @@
 import { RowDataPacket } from "mysql2";
 import { OrderDetailService, OrderItemService, PaymentDetailService } from "../Config/db";
+import { readOrderId } from "../Config/firebase";
 
 export enum PaymentStatus{
     lunas = "lunas",
@@ -77,6 +78,20 @@ export class OrderDetailModel{
         }
     }
 
+    public async checkOrderPayment(orderId :number):Promise<boolean>{
+        try {
+            const paymentComplete:boolean = await readOrderId(orderId);
+            if(!paymentComplete){
+                return false;
+            }
+            console.log(`Payment for order id = ${orderId} is complete, from OrderDetailModel.checkOrderPayment`);
+            return true
+        } catch (error) {
+            console.error(`error paying for items with order id ${orderId}, from OrderDetailModel.checkOrderPayment\n ${error}`)
+            return false;
+        }
+    }
+
     private isOrderDetailProps(data:any):data is OrderDetailProps{
         return(
             typeof data.id === "number" &&
@@ -107,6 +122,21 @@ export class OrderItemModel{
             console.log("success add new order item from OrderItemModel.addOrderItem");
         } catch (error) {
             throw new Error(`error from OrderItemModel.addOrderItem:\n\n ${error}`);
+        }
+    }
+
+    public async updateOrderItemStatus(orderId: number, status: OrderItemStatus):Promise<boolean>{
+        try {
+            const updateOrderStatusSuccess: boolean = await this.orderItemService.updateOrderItemStatus(orderId, status);
+            if(!updateOrderStatusSuccess){
+                console.log(`fail updating order items status with order_id ${orderId}, from OrderItemModel.updateOrderItemStatus`);
+                return false
+            }
+            console.log(`success updating order items status with order_id ${orderId}, from OrderItemModel.updateOrderItemStatus`);
+            return true;
+        } catch (error) {
+            console.log(`Error updating order items status with order_id ${orderId}, from OrderItemModel.updateOrderItemStatus\n${error}`);
+            return false;
         }
     }
 }
@@ -160,6 +190,21 @@ export class PaymentDetailModel{
         } catch (error) {
             console.log(`Error retrieving list of payment details for user_id = ${userId}. From PaymentDetailModel.getPaymentDetailsByUserId${error}`);
             return null;
+        }
+    }
+
+    public async updatePaymentDetailStatusLunas(orderId:number):Promise<boolean>{
+        try {
+            const updateSuccess: boolean = await this.paymentDetailService.updatePaymentDetailStatus(orderId, PaymentStatus.lunas);
+            if(!updateSuccess){
+                console.log("update payment detail status failed. from PaymentDetailModel.updatePaymentDetailStatusLunas");
+                return false;
+            }
+            console.log("update payment detail status success. from PaymentDetailModel.updatePaymentDetailStatusLunas");
+            return true;
+        } catch (error) {
+            console.log("update payment detail status failed. from PaymentDetailModel.updatePaymentDetailStatusLunas\n", error);
+            return false;
         }
     }
 

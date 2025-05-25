@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
-import { PaymentDetailModel } from "../Models/orderModel";
+import { PaymentDetailModel, OrderDetailModel, OrderItemModel, OrderItemStatus} from "../Models/orderModel";
+
 class PaymentController{
     public async showPaymentList(req:Request, res:Response):Promise<void>{
         if (!req.session.user_id) {
@@ -13,7 +14,7 @@ class PaymentController{
             const avatar = req.session.avatar;
             const paymentDetailModel = new PaymentDetailModel(null);
             const paymentList = await paymentDetailModel.getPaymentDetailsByUserId(userId);
-            console.log(paymentList);
+            //console.log(paymentList);
             if (paymentList == null) {
                 res.render('user/paymentlist.pug', {name:userName, avatar:avatar, paymentList:null})
                 return;
@@ -25,7 +26,11 @@ class PaymentController{
     }
 
     public async showPaymentPage(req:Request, res:Response):Promise<void>{
-        if (!req.query.orderId || !req.query.amount) {
+        if (!req.session.user_id) {
+            res.send("<h1>Unauthorized</h1>");
+            return;
+        }
+        if (!req.query.orderId || !req.query.amount || !req.query.second_passed) {
             res.send("<h1>Lack of Information</h1>");
             return;
         }
@@ -42,6 +47,31 @@ class PaymentController{
             orderId: orderId,
             second_passed: second_passed}
         );
+    }
+
+    public async checkPaymentCompletion(req: Request, res: Response): Promise<void> {
+        const orderId: number = <number>req.body.orderId;
+        const orderDetailModel = new OrderDetailModel(null);
+
+        const paymentComplete = await orderDetailModel.checkOrderPayment(orderId);
+
+        if (!paymentComplete) {
+            // Payment not complete yet – delay and respond with "no"
+            setTimeout(() => {
+                res.status(200).json({ message: "no" });
+            }, 3000); // Wait 3s before responding
+            return;
+        }
+
+        // Payment is complete – update status and respond immediately
+        const paymentDetailModel = new PaymentDetailModel(null);
+        const orderItemModel = new OrderItemModel();
+
+        await paymentDetailModel.updatePaymentDetailStatusLunas(orderId);
+        await orderItemModel.updateOrderItemStatus(orderId, OrderItemStatus.diproses);
+
+        // Respond right away (no setTimeout needed)
+        res.status(200).json({ message: "yes" });
     }
 }
 export default PaymentController;

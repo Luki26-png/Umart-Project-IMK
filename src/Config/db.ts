@@ -3,7 +3,7 @@ import { ProductProps } from '../Models/productModel';
 import { AuthData, RegisterData } from '../Models/authModel';
 import { UserUpdateProps } from '../Models/userModel';
 import { CartProps, CartItemProps } from '../Models/cartModel';
-import { OrderDetailProps, OrderItemProps, PaymentDetailProps } from '../Models/orderModel';
+import { OrderDetailProps, OrderItemProps, OrderItemStatus, PaymentDetailProps, PaymentStatus } from '../Models/orderModel';
 
 import dbAuth from './config';
 
@@ -389,7 +389,23 @@ export class OrderItemService{
     }
   }
 
+  public async updateOrderItemStatus(orderId:number, status: OrderItemStatus):Promise<boolean>{
 
+    const sqlQuery = `UPDATE order_items SET status = ? WHERE order_id = ?`;
+    const values = [status, orderId]
+    
+    try {
+      const pool = DatabaseService.getPool();
+      const [_result, _fields] = await pool.query(sqlQuery, values);
+      console.log(`order items status with order id ${orderId}} updated successfully. from OrderItemService.updateOrderItemStatus`);
+      //console.log(`Database Operation Result:`, result);
+      // A more robust check could be: (result as any).affectedRows > 0
+      return true; 
+    } catch (error) {
+      console.error(`Error updating order items status with order id ${orderId}}, from OrderItemService.updateOrderItemStatus`, error);
+      return false;
+    }
+  }
 }
 
 export class PaymentDetailService{
@@ -444,6 +460,24 @@ export class PaymentDetailService{
       return true;
     } catch (error) {
       console.error(`Fail to delete order payment_details with order_id = ${order_id}, from PaymentDetailService.deleteByOrderId\n${error}`);
+      return false;
+    }
+  }
+
+  public async updatePaymentDetailStatus(orderId:number, status: PaymentStatus):Promise<boolean>{
+
+    const sqlQuery = `UPDATE payment_details SET status = ? WHERE order_id = ?`;
+    const values = [status, orderId]
+    
+    try {
+      const pool = DatabaseService.getPool();
+      const [_result, _fields] = await pool.query(sqlQuery, values);
+      console.log(`payment details status with order id ${orderId}} updated successfully. from PaymentDetailService.updatePaymentDetailStatus`);
+      //console.log(`Database Operation Result:`, result);
+      // A more robust check could be: (result as any).affectedRows > 0
+      return true; 
+    } catch (error) {
+      console.error(`Error updating order items status with order id ${orderId}}, from PaymentDetailService.updatePaymentDetailStatus`, error);
       return false;
     }
   }

@@ -1,8 +1,10 @@
 import { Request, Response } from "express";
-import { OrderDetailModel, OrderItemModel, PaymentDetailModel } from "../Models/orderModel";
-import { OrderDetailProps, OrderItemProps, PaymentDetailProps } from "../Models/orderModel";
-import { PaymentStatus, OrderItemStatus } from "../Models/orderModel";
+import { OrderDetailModel, OrderItemModel, 
+    PaymentDetailModel,  PaymentStatus, OrderItemStatus,  
+    OrderDetailProps, OrderItemProps, PaymentDetailProps } from "../Models/orderModel";
 import { CartItemModel } from "../Models/cartModel";
+import { writeNewOrderId } from "../Config/firebase";
+
 class OrderController{
     public async createOrder(req:Request, res: Response):Promise<void>{
         if (!req.session.user_id) {
@@ -50,6 +52,7 @@ class OrderController{
 
             const createOrderDetailSuccess: boolean = await orderDetailModel.createOrder();
             const createPaymentDetailSuccess: boolean = await paymentDetailModel.createPayment();
+            await writeNewOrderId(orderDetail.id);
             orderItems.forEach(async(item)=>{
                 await orderItemModel.addOrderItem(item);
             });
@@ -80,7 +83,7 @@ class OrderController{
                 return;
             }
             res.render('user/pesanan.pug', {name:userName, avatar:avatar, order: orderData});
-        } catch (error) {
+        }catch (error) {
             throw new Error(`Error showing an order from OrderController.showOrder\n\n${error}`);
             
         }
